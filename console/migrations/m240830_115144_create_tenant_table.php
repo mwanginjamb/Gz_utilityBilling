@@ -21,6 +21,7 @@ class m240830_115144_create_tenant_table extends Migration
             'billing_email_address' => $this->string(50),
             'id_number' => $this->string(50),
             'agreed_rent_payable' => $this->integer(),
+            'agreed_water_rate' => $this->integer(),
             'has_signed_tenancy_agreement' => $this->boolean(),
             'created_at' => $this->integer(),
             'update_at' => $this->integer(),
