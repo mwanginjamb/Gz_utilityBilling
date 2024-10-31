@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "paymentlines".
@@ -24,6 +26,11 @@ use Yii;
  */
 class Paymentlines extends \yii\db\ActiveRecord
 {
+    public $tenant_id;
+    public $tenant_name;
+    public $agreed_rent_payable;
+    public $agreed_water_rate;
+
     /**
      * {@inheritdoc}
      */
@@ -32,12 +39,24 @@ class Paymentlines extends \yii\db\ActiveRecord
         return 'paymentlines';
     }
 
+    public function behaviors()
+    {
+        return [
+            BlameableBehavior::class,
+            [
+                'class' => TimestampBehavior::class,
+                'updatedAtAttribute' => 'update_at',
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
+            [['tenant_id', 'tenant_name', 'agreed_rent_payable', 'agreed_water_rate'], 'safe'],
             [['paymentheader_id', 'opening_water_readings', 'closing_water_readings', 'settled', 'created_at', 'update_at', 'created_by', 'updated_by', 'deleted', 'deleted_at', 'deleted_by'], 'integer'],
             [['paymentheader_id'], 'exist', 'skipOnError' => true, 'targetClass' => Paymentheader::class, 'targetAttribute' => ['paymentheader_id' => 'id']],
         ];

@@ -2,11 +2,12 @@
 
 namespace frontend\controllers;
 
-use common\models\Property;
-use common\models\PropertySearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use common\models\Property;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use common\models\PropertySearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * PropertyController implements the CRUD actions for Property model.

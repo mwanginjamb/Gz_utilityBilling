@@ -40,10 +40,11 @@ class TenantController extends Controller
     {
         $searchModel = new TenantSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->sort->defaultOrder = ['id' => 'SORT_DESC'];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'dataProvider' => Tenant::find()->all(),
         ]);
     }
 

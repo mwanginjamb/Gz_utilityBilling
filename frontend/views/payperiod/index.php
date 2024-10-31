@@ -30,11 +30,23 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            // 'id',
             'period',
             'body:ntext',
-            'property_id',
-            'payperiodstatus_id',
+            [
+                'attribute' => 'property_id',
+                'label' => 'Property',
+                'value' => 'property.name'
+            ],
+            [
+                'attribute' => 'payperiodstatus_id',
+                'value' => function (Payperiod $model) {
+                        if ($model->payperiodstatus) {
+                            return $model->payperiodstatus->name;
+                        }
+                        return null;
+                    }
+            ],
             //'created_at',
             //'update_at',
             //'created_by',
@@ -42,8 +54,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Payperiod $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                        return Url::toRoute([$action, 'id' => $model->id]);
+                    }
             ],
         ],
     ]); ?>

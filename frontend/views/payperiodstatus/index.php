@@ -30,17 +30,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'name',
-            'created_at',
-            'update_at',
-            'created_by',
+            'created_at:datetime',
+            'update_at:datetime',
+            //'created_by',
             //'updated_by',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Payperiodstatus $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                        return Url::toRoute([$action, 'id' => $model->id]);
+                    }
             ],
         ],
     ]); ?>

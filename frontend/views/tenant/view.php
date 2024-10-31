@@ -36,11 +36,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'cell_number',
             'billing_email_address:email',
             'id_number',
-            'agreed_rent_payable',
-            'agreed_water_rate',
+            [
+                'attribute' => 'agreed_rent_payable',
+                'format' => ['currency', 'Ksh'],
+            ],
+            [
+                'attribute' => 'agreed_water_rate',
+                'format' => ['currency', 'Ksh'],
+            ],
             'has_signed_tenancy_agreement',
-            'created_at',
-            'update_at',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
 

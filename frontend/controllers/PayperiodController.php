@@ -2,11 +2,15 @@
 
 namespace frontend\controllers;
 
-use common\models\Payperiod;
-use common\models\PayperiodSearch;
+use common\models\Paymentheader;
+use common\models\Payperiodstatus;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use common\models\Property;
 use yii\filters\VerbFilter;
+use common\models\Payperiod;
+use yii\helpers\ArrayHelper;
+use common\models\PayperiodSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * PayperiodController implements the CRUD actions for Payperiod model.
@@ -25,6 +29,7 @@ class PayperiodController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                        'generate-header' => ['POST'],
                     ],
                 ],
             ]
@@ -55,8 +60,10 @@ class PayperiodController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'paymentheader' => Paymentheader::find()->joinWith('paymentlines')->where(['payperiod_id' => $model->id, 'property_id' => $model->property_id])->asArray()->one(),
         ]);
     }
 
@@ -79,6 +86,7 @@ class PayperiodController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'properties' => ArrayHelper::map(Property::find()->all(), 'id', 'name')
         ]);
     }
 
@@ -94,11 +102,14 @@ class PayperiodController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            \Yii::$app->session->setFlash('success', 'Record Saved Successfully.');
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'properties' => ArrayHelper::map(Property::find()->all(), 'id', 'name'),
+            'payperiodstatus' => ArrayHelper::map(Payperiodstatus::find()->all(), 'id', 'name')
         ]);
     }
 
@@ -114,6 +125,21 @@ class PayperiodController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionGenerateHeader()
+    {
+
+        $paymentHeader = new Paymentheader();
+        $paymentHeader->payperiod_id = \Yii::$app->request->post('payperiod');
+        $paymentHeader->property_id = \Yii::$app->request->post('property');
+
+        if ($paymentHeader->save()) {
+            \Yii::$app->session->setFlash('success', 'Payment Header for this property and period has been created.');
+        } else {
+            \Yii::$app->session->setFlash('error', 'Could not create a payperiod payment header.');
+        }
+        return $this->redirect(['view', 'id' => \Yii::$app->request->post('payperiod')]);
     }
 
     /**

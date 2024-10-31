@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "paymentheader".
@@ -29,6 +32,17 @@ class Paymentheader extends \yii\db\ActiveRecord
         return 'paymentheader';
     }
 
+    public function behaviors()
+    {
+        return [
+            BlameableBehavior::class,
+            [
+                'class' => TimestampBehavior::class,
+                'updatedAtAttribute' => 'update_at',
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -38,6 +52,13 @@ class Paymentheader extends \yii\db\ActiveRecord
             [['payperiod_id', 'property_id', 'created_at', 'update_at', 'created_by', 'updated_by'], 'integer'],
             [['payperiod_id'], 'exist', 'skipOnError' => true, 'targetClass' => Payperiod::class, 'targetAttribute' => ['payperiod_id' => 'id']],
             [['property_id'], 'exist', 'skipOnError' => true, 'targetClass' => Property::class, 'targetAttribute' => ['property_id' => 'id']],
+            [
+                ['payperiod_id', 'property_id'],
+                'unique',
+                'targetAttribute' => ['payperiod_id', 'property_id'],
+                'message' => 'The combination of Payperiod ID and Property ID is already in use.'
+            ],
+
         ];
     }
 
@@ -87,6 +108,7 @@ class Paymentheader extends \yii\db\ActiveRecord
         return $this->hasOne(Property::class, ['id' => 'property_id']);
     }
 
+
     /**
      * {@inheritdoc}
      * @return PaymentheaderQuery the active query used by this AR class.
@@ -95,4 +117,64 @@ class Paymentheader extends \yii\db\ActiveRecord
     {
         return new PaymentheaderQuery(get_called_class());
     }
+
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if ($insert) {
+            $this->generateInvoiceLines();
+        }
+    }
+
+    protected function generateInvoiceLines()
+    {
+        $property = $this->property;
+        $occupiedUnits = Unit::find()->joinWith('tenant')
+            ->andWhere(['property_id' => $property->id])
+            ->andWhere(['not', ['tenant.id' => NULL]])->all();
+        Yii::$app->utility->log(ArrayHelper::map($occupiedUnits, 'id', 'unit_name'), 'property-units' . $property->name);
+        $paymentLines = [];
+        if ($occupiedUnits) {
+            foreach ($occupiedUnits as $unit) {
+                $tenant = $unit->tenant;
+
+                if (is_object($tenant)) {
+                    $paymentLines[] = [
+                        'paymentheader_id' => $this->id,
+                        'opening_water_readings' => 0.00,
+                        'closing_water_readings' => 0.00,
+                        'tenant_id' => $tenant->id,
+                        'tenant_name' => $tenant->principle_tenant_name,
+                        'agreed_rent_payable' => $tenant->agreed_rent_payable,
+                        'agreed_water_rate' => $tenant->agreed_water_rate,
+                    ];
+                }
+
+
+                Yii::$app->utility->log($paymentLines, 'line-' . $property->name . ' - ' . $this->payperiod->body);
+
+            }
+
+            // batch insert if there are any payment lines generated
+
+            if (count($paymentLines)) {
+                Yii::$app->db->createCommand()->batchInsert(
+                    Paymentlines::tableName(),
+                    [
+                        'paymentheader_id',
+                        'opening_water_readings',
+                        'closing_water_readings',
+                        'tenant_id',
+                        'tenant_name',
+                        'agreed_rent_payable',
+                        'agreed_water_rate'
+                    ],
+                    $paymentLines
+                )->execute();
+            }
+        }
+        return null;
+    }
+
 }

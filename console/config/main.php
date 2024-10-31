@@ -1,4 +1,5 @@
 <?php
+use yii\faker\FixtureController;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -14,13 +15,15 @@ return [
     'controllerNamespace' => 'console\controllers',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'controllerMap' => [
         'fixture' => [
-            'class' => \yii\console\controllers\FixtureController::class,
+            'class' => FixtureController::class,
             'namespace' => 'common\fixtures',
-          ],
+            'templatePath' => '@common/fixtures/templates',
+            'fixtureDataPath' => '@common/fixtures/data',
+        ],
     ],
     'components' => [
         'log' => [

@@ -41,7 +41,7 @@ class Unit extends \yii\db\ActiveRecord
             [['tenant_id', 'property_id', 'created_at', 'update_at', 'created_by', 'updated_by', 'deleted', 'deleted_at', 'deleted_by'], 'integer'],
             [['unit_name'], 'string', 'max' => 50],
             [['property_id'], 'exist', 'skipOnError' => true, 'targetClass' => Property::class, 'targetAttribute' => ['property_id' => 'id']],
-            [['tenant_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tenant::class, 'targetAttribute' => ['tenant_id' => 'id']],
+            //[['tenant_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tenant::class, 'targetAttribute' => ['tenant_id' => 'id']],
         ];
     }
 
@@ -82,7 +82,7 @@ class Unit extends \yii\db\ActiveRecord
      */
     public function getTenant()
     {
-        return $this->hasOne(Tenant::class, ['id' => 'tenant_id']);
+        return $this->hasOne(Tenant::class, ['house_number' => 'id']);
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use common\models\Property;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "tenant".
@@ -25,9 +27,19 @@ class Tenant extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
+    public $property;
+
     public static function tableName()
     {
         return 'tenant';
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+        ];
     }
 
     /**
@@ -36,10 +48,14 @@ class Tenant extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'agreed_rent_payable', 'agreed_water_rate', 'has_signed_tenancy_agreement', 'created_at', 'update_at'], 'integer'],
+            [['principle_tenant_name', 'billing_email_address', 'house_number', 'cell_number', 'agreed_rent_payable', 'agreed_water_rate'], 'required'],
+            [['user_id', 'agreed_rent_payable', 'agreed_water_rate', 'has_signed_tenancy_agreement', 'created_at', 'updated_at'], 'integer'],
             [['principle_tenant_name', 'house_number'], 'string', 'max' => 255],
-            [['cell_number'], 'string', 'max' => 15],
+            [['cell_number'], 'string', 'max' => 25],
             [['billing_email_address', 'id_number'], 'string', 'max' => 50],
+            ['billing_email_address', 'email'],
+            ['house_number', 'unique'],
+            ['property', 'string']
         ];
     }
 
@@ -67,8 +83,9 @@ class Tenant extends \yii\db\ActiveRecord
 
     public function getUnit()
     {
-        return $this->hasOne(Unit::class, ['unit_name' => 'house_number']);
+        return $this->hasOne(Unit::class, ['id' => 'house_number']);
     }
+
 
     /**
      * {@inheritdoc}
