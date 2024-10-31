@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Unit;
 use yii\web\Controller;
 use common\models\Property;
 use yii\filters\VerbFilter;
@@ -56,8 +57,32 @@ class PropertyController extends Controller
      */
     public function actionView($id)
     {
+        $totalRevenue = 0;
+
+        $occupiedUnits = Unit::find()->joinWith('tenant')
+            ->andWhere(['property_id' => $id])
+            ->andWhere(['not', ['tenant.id' => NULL]])->asArray()->all();
+
+        $vacantUnits = Unit::find()->joinWith('tenant')
+            ->andWhere(['property_id' => $id])
+            ->andWhere(['tenant.id' => NULL])->asArray()->all();
+
+        $totalTenants = count($occupiedUnits);
+        $totalVacant = count($vacantUnits);
+
+        if (is_array($occupiedUnits) && count($occupiedUnits)) {
+            $totalRevenue = array_reduce($occupiedUnits, function ($total, $unit) {
+                return $total + $unit['tenant']['agreed_rent_payable'];
+            }, 0);
+        }
+
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'occupiedUnits' => $occupiedUnits,
+            'totalTenants' => $totalTenants,
+            'totalVacant' => $totalVacant,
+            'totalRevenue' => $totalRevenue
         ]);
     }
 
