@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\jobs\SendEmailJob;
 use common\models\Paymentheader;
 use common\models\Payperiodstatus;
 use yii\web\Controller;
@@ -157,4 +158,32 @@ class PayperiodController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
+
+    public function actionInvoice()
+    {
+        $id = \Yii::$app->request->post('id');
+        $payPeriod = $this->findModel($id);
+        // Retrieve the payment header
+        $paymentHeader = Paymentheader::find()->joinWith('paymentlines')->where(['payperiod_id' => $payPeriod->id, 'property_id' => $payPeriod->property_id])->one();
+        if (!$paymentHeader) {
+            throw new NotFoundHttpException("Payment Header not found.");
+        }
+
+        // Get all associated payment lines
+        $paymentLines = $paymentHeader->paymentlines;
+
+        // Initialize a result array to store email sending status
+        $emailResults = [];
+
+        // Loop through each payment line and send the email
+        foreach ($paymentLines as $paymentLine) {
+            \Yii::$app->queue->push(new SendEmailJob([
+                'paymentLineId' => $paymentLine->id,
+            ]));
+        }
+
+        return $this->redirect(['index']);
+    }
+
 }

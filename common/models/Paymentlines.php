@@ -26,10 +26,7 @@ use yii\behaviors\TimestampBehavior;
  */
 class Paymentlines extends \yii\db\ActiveRecord
 {
-    public $tenant_id;
-    public $tenant_name;
-    public $agreed_rent_payable;
-    public $agreed_water_rate;
+
 
     /**
      * {@inheritdoc}
@@ -93,6 +90,11 @@ class Paymentlines extends \yii\db\ActiveRecord
         return $this->hasOne(Paymentheader::class, ['id' => 'paymentheader_id']);
     }
 
+    public function getTenant()
+    {
+        return $this->hasOne(Tenant::class, ['id' => 'tenant_id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return PaymentlinesQuery the active query used by this AR class.
@@ -101,4 +103,6 @@ class Paymentlines extends \yii\db\ActiveRecord
     {
         return new PaymentlinesQuery(get_called_class());
     }
+
+
 }

@@ -41,6 +41,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     'method' => 'post',
                 ],
             ]) ?>
+            <?= Html::a(Yii::t('app', 'Invoice Tenants'), ['invoice'], [
+                'class' => 'btn btn-success',
+                'data' => [
+                    'confirm' => Yii::t('app', 'Are you sure you want to Invoice tenants in this property for this pay period ?'),
+                    'params' => [
+                        'id' => $model->id
+                    ],
+                    'method' => 'post',
+                ],
+            ]) ?>
 
         </div>
     </div>

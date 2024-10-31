@@ -24,6 +24,13 @@ return [
             'templatePath' => '@common/fixtures/templates',
             'fixtureDataPath' => '@common/fixtures/data',
         ],
+        /* 'migrate' => [
+             'class' => 'yii\console\controllers\MigrateController',
+             'migrationPath' => null,
+             'migrationNamespaces' => [
+                 'yii\queue\db\migrations',
+             ],
+         ]*/
     ],
     'components' => [
         'log' => [
@@ -31,6 +38,15 @@ return [
                 [
                     'class' => \yii\log\FileTarget::class,
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class' => \yii\log\FileTarget::class,
+                    'levels' => ['error', 'warning', 'info'],
+                    'categories' => ['jobErrors', 'jobInfo'], // Custom category for job errors
+                    'logFile' => '@runtime/logs/job-errors.log', // Path to the log file
+                    'logVars' => [], // Exclude variables like $_SERVER, $_POST, etc., if unnecessary
+                    'maxFileSize' => 10240, // Maximum log file size in KB
+                    'maxLogFiles' => 10, // Number of log files to keep
                 ],
             ],
         ],

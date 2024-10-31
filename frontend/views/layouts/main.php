@@ -263,7 +263,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 class="nav-link <?= Yii::$app->utility->currentCtrl(['payperiod', 'payperiodstatus']) ? 'active' : '' ?>">
                                 <i class="nav-icon fas fa-car"></i>
                                 <p>
-                                    Invoiving
+                                    Invoicing
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
