@@ -252,6 +252,7 @@ class PayperiodController extends Controller
                 ->setMethod('PUT')
                 ->setUrl($endpoint)
                 ->addHeaders(['Content-Type' => 'application/json'])
+                ->setFormat(Client::FORMAT_JSON)  // Ensures JSON encoding
                 ->setData($payload)
                 ->setOptions([
                     CURLOPT_SSL_VERIFYPEER => false,
@@ -260,9 +261,17 @@ class PayperiodController extends Controller
 
             $response = $request->send();
 
-            return $response;
+            if ($response->isOk) { // Check if the response status is 200-299
+                return $response->data; // Return the relevant response data
+            } else {
+                // Log error details if needed and return a clear message
+                return [
+                    'status' => $response->statusCode,
+                    'error' => $response->data ?? 'Unexpected error occurred'
+                ];
+            }
         } catch (\Exception $e) {
-            return "HTTP request failed with error: " . $e->getTraceAsString();
+            return "HTTP request failed with error: " . $e->getMessage();
         }
 
 
