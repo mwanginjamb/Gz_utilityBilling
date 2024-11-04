@@ -48,11 +48,17 @@ return [
             'rules' => [
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => PaymentlinesController::class,
+                    'controller' => ['apiv1/invoicelines'],
+                    'except' => ['delete']
                 ]
             ],
         ],
 
+    ],
+    'modules' => [
+        'apiv1' => [
+            'class' => 'frontend\modules\apiv1\Module',
+        ]
     ],
     'params' => $params,
 ];
