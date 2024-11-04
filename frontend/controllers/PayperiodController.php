@@ -237,7 +237,6 @@ class PayperiodController extends Controller
         try {
             $endpoint = Yii::$app->request->post('service');
             $closing_reading = Yii::$app->request->post('closing_reading');
-            $id = Yii::$app->request->post('key');
             $client = new Client([
                 'transport' => CurlTransport::class,
             ]);
@@ -255,12 +254,7 @@ class PayperiodController extends Controller
                 ]);
 
             $response = $request->send();
-
-            if ($response) {
-                return $response->data();
-            } else {
-                return $response->statusCode . ':' . $response->content;
-            }
+            return $response;
         } catch (\Exception $e) {
             return "HTTP request failed with error: " . $e->getTraceAsString();
         }
