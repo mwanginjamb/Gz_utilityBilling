@@ -9,18 +9,8 @@ class PaymentlinesController extends ActiveController
 {
 
     public $modelClass = '\common\models\Paymentlines';
-
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'create' => ['POST'],
-                    'update' => ['PUT', 'PATCH'],
-                    'delete' => ['DELETE'],
-                ],
-            ],
-        ];
-    }
+    public $serializer = [
+        'class' => 'yii/rest/Serializer',
+        'collectionEnvelope' => 'item'
+    ];
 }

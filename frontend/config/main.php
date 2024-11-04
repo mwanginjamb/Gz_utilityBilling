@@ -47,9 +47,8 @@ return [
             'showScriptName' => false,
             'rules' => [
                 [
-                    'class' => UrlRule::class,
+                    'class' => 'yii\rest\UrlRule',
                     'controller' => PaymentlinesController::class,
-                    'pluralize' => false
                 ]
             ],
         ],
