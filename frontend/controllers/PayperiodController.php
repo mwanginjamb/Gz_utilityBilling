@@ -236,25 +236,31 @@ class PayperiodController extends Controller
 
         try {
             $endpoint = Yii::$app->request->post('service');
-            $closing_reading = Yii::$app->request->post('closing_reading');
+            $field = Yii::$app->request->post('name');
+            $value = Yii::$app->request->post('value');
+
+            $payload = [
+                $field => $value
+            ];
             $client = new Client([
                 'transport' => CurlTransport::class,
             ]);
+
+
 
             $request = $client->createRequest()
                 ->setMethod('PUT')
                 ->setUrl($endpoint)
                 ->addHeaders(['Content-Type' => 'application/json'])
-                ->setData([
-                    'closing_water_readings' => $closing_reading,
-                ])
+                ->setData($payload)
                 ->setOptions([
                     CURLOPT_SSL_VERIFYPEER => false,
                     CURLOPT_SSL_VERIFYHOST => false
                 ]);
 
             $response = $request->send();
-            return $response;
+
+            return $response->data();
         } catch (\Exception $e) {
             return "HTTP request failed with error: " . $e->getTraceAsString();
         }
