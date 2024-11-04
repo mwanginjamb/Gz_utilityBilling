@@ -260,7 +260,7 @@ class PayperiodController extends Controller
 
             $response = $request->send();
 
-            return $response->data();
+            return $response;
         } catch (\Exception $e) {
             return "HTTP request failed with error: " . $e->getTraceAsString();
         }
