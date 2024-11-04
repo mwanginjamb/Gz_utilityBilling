@@ -47,8 +47,11 @@ return [
             'showScriptName' => false,
             'rules' => [
                 [
-                    'class' => UrlRule::class,
+                    'class' => \yii\rest\UrlRule::class,
                     'controller' => PaymentlinesController::class,
+                    'patterns' => [
+                        'GET,POST,PUT,PATCH' => '',  // Allow multiple methods for the root action
+                    ],
                     'except' => ['delete']
                 ]
             ],
