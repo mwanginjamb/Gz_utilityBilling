@@ -9,6 +9,7 @@
 
 namespace common\Library;
 
+use common\models\Property;
 use yii;
 use yii\base\Component;
 use yii\helpers\ArrayHelper;
@@ -17,5 +18,16 @@ use yii\helpers\ArrayHelper;
 class DashboardComponent extends Component
 {
 
+    // count properties
+
+    public function countProperties()
+    {
+        $properties = Property::find()->select(['id'])->asArray()->all();
+        if ($properties) {
+            return count($properties);
+        }
+
+        return 0;
+    }
 
 }

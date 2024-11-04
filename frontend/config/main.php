@@ -1,4 +1,7 @@
 <?php
+
+use frontend\modules\apiv1\controllers\PaymentlinesController;
+use yii\rest\UrlRule;
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -14,6 +17,9 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -36,11 +42,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                [
+                    'class' => UrlRule::class,
+                    'controller' => PaymentlinesController::class,
+                    'except' => ['delete']
+                ]
             ],
         ],
 

@@ -32,28 +32,28 @@ class AdminlteAsset extends AssetBundle
         'plugins/summernote/summernote-bs4.css',
         'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700',
 
-        'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css',
+        // 'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css',
 
         'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css',
-        'css/steps.css',
-        'css/validation.css',
+        // 'css/steps.css',
+        // 'css/validation.css',
         'css/dblClick.mobile.css',
-        //https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css',
+        // https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css',
 
-        'css/bstimepicker.css',
+        // 'css/bstimepicker.css',
         'plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css'
     ];
     public $js = [
 
-        //'plugins/jquery/jquery.min.js',
+        'plugins/jquery/jquery.min.js',
         'plugins/bootstrap/js/bootstrap.bundle.min.js',
         'plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js',
         'dist/js/adminlte.min.js',
-        //'dist/js/demo.js',
+        // 'dist/js/demo.js',
         'plugins/jquery-mousewheel/jquery.mousewheel.js',
         'plugins/raphael/raphael.min.js',
         'plugins/jquery-mapael/jquery.mapael.min.js',
-        //'plugins/jquery-mapael/maps/usa_states.min.js',
+        // 'plugins/jquery-mapael/maps/usa_states.min.js',
         'plugins/chart.js/Chart.min.js',
         // 'dist/js/pages/dashboard2.js',
 
@@ -74,12 +74,12 @@ class AdminlteAsset extends AssetBundle
         'plugins/sweetalert2/sweetalert2.min.js',
 
 
-        'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js',
+        //'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js',
         'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js',
         'https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js ',
-        'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js',
-        'Js/custom.js',
-        'Js/app.js',
+        // 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js',
+        'js/custom.js',
+        //'Js/app.js',
         'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js',
         'https://cdn.jsdelivr.net/npm/sweetalert2@9', //Sweet Alert
         'https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.js',
@@ -87,7 +87,7 @@ class AdminlteAsset extends AssetBundle
 
     ];
     public $depends = [
-        'yii\web\YiiAsset',
+        //'yii\web\YiiAsset',
         //'yii\bootstrap\BootstrapAsset',
         'yii\bootstrap5\BootstrapAsset',
     ];

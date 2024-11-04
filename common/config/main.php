@@ -9,6 +9,11 @@ return [
         'queue',
     ],
     'components' => [
+        'request' => [
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
+        ],
         'db' => [
             'class' => \yii\db\Connection::class,
             'dsn' => 'mysql:host=' . env('DB_HOST') . ';dbname=' . env('DB_NAME') . ';port=' . env('DB_PORT'),
@@ -48,4 +53,9 @@ return [
             ],
         ],
     ],
+    'modules' => [
+        'apiv1' => [
+            'class' => 'frontend\modules\apiv1\Module',
+        ]
+    ]
 ];

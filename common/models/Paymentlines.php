@@ -53,7 +53,7 @@ class Paymentlines extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tenant_id', 'tenant_name', 'agreed_rent_payable', 'agreed_water_rate'], 'safe'],
+            [['tenant_id', 'tenant_name', 'agreed_rent_payable', 'agreed_water_rate', 'water_bill', 'units_used', 'service_charge', 'invoiced'], 'safe'],
             [['paymentheader_id', 'opening_water_readings', 'closing_water_readings', 'settled', 'created_at', 'update_at', 'created_by', 'updated_by', 'deleted', 'deleted_at', 'deleted_by'], 'integer'],
             [['paymentheader_id'], 'exist', 'skipOnError' => true, 'targetClass' => Paymentheader::class, 'targetAttribute' => ['paymentheader_id' => 'id']],
         ];

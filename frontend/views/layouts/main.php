@@ -211,7 +211,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                     <p>
                                         Properties
                                         <i class="fas fa-angle-left right"></i>
-                                        <!--<span class="badge badge-info right">6</span>-->
+                                        <span
+                                            class="badge badge-info right"><?= Yii::$app->dashboard->countProperties() ?></span>
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
@@ -220,7 +221,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                             class="nav-link <?= Yii::$app->utility->currentaction('property', 'index') ? 'active' : '' ?>">
                                             <i class="fa fa-check-square nav-icon"></i>
                                             <p>List</p>
-                                            <span class="badge badge-info right">0</span>
+                                            <span
+                                                class="badge badge-info right"><?= Yii::$app->dashboard->countProperties() ?></span>
                                         </a>
                                     </li>
 
@@ -276,181 +278,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                         <p>Payperiods List</p>
                                     </a>
                                 </li>
-                                <?php if (YII_ENV === 'dev'): ?>
-                                    <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>fleet/approved"
-                                            class="nav-link <?= Yii::$app->utility->currentaction('fleet', 'pending') ? 'active' : '' ?>">
-                                            <i class="fa fa-door-open nav-icon"></i>
-                                            <p>Approved Requisitions</p>
-                                        </a>
-                                    </li>
-
-
-
-                                    <!-- vehicle maintenance -->
-                                    <li
-                                        class="nav-item has-treeview  <?= Yii::$app->utility->currentCtrl(['vehiclemaintenance']) ? 'menu-open' : '' ?>">
-                                        <a href="#"
-                                            class="nav-link <?= Yii::$app->utility->currentCtrl(['vehiclemaintenance']) ? 'active' : '' ?>">
-                                            <i class="nav-icon fas fa-paper-plane"></i>
-                                            <p>
-                                                Vehicle Maintenance
-                                                <i class="right fas fa-angle-left"></i>
-                                            </p>
-                                        </a>
-                                        <ul class="nav nav-treeview">
-
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>vehiclemaintenance"
-                                                    class="nav-link <?= Yii::$app->utility->currentaction('vehiclemaintenance', 'index') ? 'active' : '' ?>">
-                                                    <i class="fa fa-door-open nav-icon"></i>
-                                                    <p>Open Requisitions</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>vehiclemaintenance/pending"
-                                                    class="nav-link <?= Yii::$app->utility->currentaction('vehiclemaintenance', 'pending') ? 'active' : '' ?>">
-                                                    <i class="fa fa-door-open nav-icon"></i>
-                                                    <p>Pending Requisitions</p>
-                                                </a>
-                                            </li>
-
-
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>vehiclemaintenance/approved"
-                                                    class="nav-link <?= Yii::$app->utility->currentaction('vehiclemaintenance', 'approved') ? 'active' : '' ?>">
-                                                    <i class="fa fa-door-open nav-icon"></i>
-                                                    <p>Approved Requisitions</p>
-                                                </a>
-                                            </li>
-
-                                        </ul>
-                                    </li>
-                                    <!-- / vehicle maintenence -->
-
-
-                                    <!-- Trips -->
-                                    <li
-                                        class="nav-item has-treeview  <?= Yii::$app->utility->currentCtrl(['trip']) ? 'menu-open' : '' ?>">
-                                        <a href="#"
-                                            class="nav-link <?= Yii::$app->utility->currentCtrl(['trip']) ? 'active' : '' ?>">
-                                            <i class="nav-icon fas fa-paper-plane"></i>
-                                            <p>
-                                                Trip Requisitions
-                                                <i class="right fas fa-angle-left"></i>
-                                            </p>
-                                        </a>
-                                        <ul class="nav nav-treeview">
-
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>trip"
-                                                    class="nav-link <?= Yii::$app->utility->currentaction('trip', 'index') ? 'active' : '' ?>">
-                                                    <i class="fa fa-door-open nav-icon"></i>
-
-                                                    <p>Open Trips (Staff)</p>
-
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>trip/approved"
-                                                    class="nav-link <?= Yii::$app->utility->currentaction('trip', 'approved') ? 'active' : '' ?>">
-                                                    <i class="fa fa-door-open nav-icon"></i>
-
-                                                    <p>Closed Trips (Staff)</p>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>trip/indexdriver"
-                                                    class="nav-link <?= Yii::$app->utility->currentaction('trip', 'indexdriver') ? 'active' : '' ?>">
-                                                    <i class="fa fa-door-open nav-icon"></i>
-                                                    <p>Driver Open Trips</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>trip/approveddriver"
-                                                    class="nav-link <?= Yii::$app->utility->currentaction('trip', 'approveddriver') ? 'active' : '' ?>">
-                                                    <i class="fa fa-door-open nav-icon"></i>
-                                                    <p>Driver Closed Trips</p>
-                                                </a>
-                                            </li>
-
-
-                                        </ul>
-                                    </li>
-                                    <!-- / Trips -->
-
-                                    <!-- Work Tickets -->
-                                    <li
-                                        class="nav-item has-treeview  <?= Yii::$app->utility->currentCtrl(['workticket']) ? 'menu-open' : '' ?>">
-                                        <a href="#"
-                                            class="nav-link <?= Yii::$app->utility->currentCtrl(['workticket']) ? 'active' : '' ?>">
-                                            <i class="nav-icon fas fa-paper-plane"></i>
-                                            <p>
-                                                Work Tickets
-                                                <i class="right fas fa-angle-left"></i>
-                                            </p>
-                                        </a>
-                                        <ul class="nav nav-treeview">
-
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>workticket"
-                                                    class="nav-link <?= Yii::$app->utility->currentaction('workticket', 'index') ? 'active' : '' ?>">
-                                                    <i class="fa fa-door-open nav-icon"></i>
-                                                    <p>Open Work Tickets</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>workticket/approved"
-                                                    class="nav-link <?= Yii::$app->utility->currentaction('workticket', 'approved') ? 'active' : '' ?>">
-                                                    <i class="fa fa-door-open nav-icon"></i>
-                                                    <p>Approved Work Tickets</p>
-                                                </a>
-                                            </li>
-
-                                            <li class="nav-item">
-                                                <a href="<?= $absoluteUrl ?>workticket/closed"
-                                                    class="nav-link <?= Yii::$app->utility->currentaction('workticket', 'closed') ? 'active' : '' ?>">
-                                                    <i class="fa fa-door-open nav-icon"></i>
-                                                    <p>Closed Work Tickets</p>
-                                                </a>
-                                            </li>
-
-
-                                        </ul>
-                                    </li>
-                                    <!-- / Work Tickets -->
-                                <?php endif; ?>
-
-
-
                             </ul>
-
-
                         </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

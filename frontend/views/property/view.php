@@ -26,6 +26,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'method' => 'post',
                 ],
             ]) ?>
+            <?= Html::a(Yii::t('app', 'Pay Periods'), ['payperiod/property-payperiods'], [
+                'class' => 'btn btn-info',
+                'data' => [
+                    'params' => [
+                        'id' => $model->id
+                    ],
+                    'method' => 'post',
+                ],
+            ]) ?>
 
 
         </div>

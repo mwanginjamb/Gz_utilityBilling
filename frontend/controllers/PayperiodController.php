@@ -5,6 +5,10 @@ namespace frontend\controllers;
 use common\jobs\SendEmailJob;
 use common\models\Paymentheader;
 use common\models\Payperiodstatus;
+use yii\base\Response;
+use yii\filters\ContentNegotiator;
+use yii\httpclient\Client;
+use yii\httpclient\CurlTransport;
 use yii\web\Controller;
 use common\models\Property;
 use yii\filters\VerbFilter;
@@ -12,6 +16,7 @@ use common\models\Payperiod;
 use yii\helpers\ArrayHelper;
 use common\models\PayperiodSearch;
 use yii\web\NotFoundHttpException;
+use Yii;
 
 /**
  * PayperiodController implements the CRUD actions for Payperiod model.
@@ -33,8 +38,30 @@ class PayperiodController extends Controller
                         'generate-header' => ['POST'],
                     ],
                 ],
+                'contentNegotiator' => [
+                    'class' => ContentNegotiator::class,
+                    'only' => ['commit'],
+                    'formatParam' => '_format',
+                    'formats' => [
+                        'application/json' => \yii\web\Response::FORMAT_JSON,
+                    ]
+                ],
             ]
         );
+    }
+
+    public function beforeAction($action)
+    {
+
+        $ExceptedActions = [
+            'commit',
+        ];
+
+        if (in_array($action->id, $ExceptedActions)) {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     /**
@@ -50,6 +77,16 @@ class PayperiodController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionPropertyPayperiods()
+    {
+        $id = \Yii::$app->request->post('id');
+        $payperiods = Payperiod::findAll(['property_id' => $id]);
+
+        return $this->render('pperiods', [
+            'items' => $payperiods
         ]);
     }
 
@@ -128,6 +165,16 @@ class PayperiodController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionClose()
+    {
+        $model = $this->findModel(\Yii::$app->request->post('id'));
+        if ($model) {
+            $model->payperiodstatus_id = 2;
+            $model->save();
+        }
+        return $this->redirect(\Yii::$app->request->referrer);
+    }
+
     public function actionGenerateHeader()
     {
 
@@ -173,9 +220,6 @@ class PayperiodController extends Controller
         // Get all associated payment lines
         $paymentLines = $paymentHeader->paymentlines;
 
-        // Initialize a result array to store email sending status
-        $emailResults = [];
-
         // Loop through each payment line and send the email
         foreach ($paymentLines as $paymentLine) {
             \Yii::$app->queue->push(new SendEmailJob([
@@ -184,6 +228,45 @@ class PayperiodController extends Controller
         }
 
         return $this->redirect(['index']);
+    }
+
+    public function actionCommit()
+    {
+
+
+        try {
+            $endpoint = Yii::$app->request->post('service');
+            $closing_reading = Yii::$app->request->post('closing_reading');
+            $id = Yii::$app->request->post('key');
+            $client = new Client([
+                'transport' => CurlTransport::class,
+            ]);
+
+            $request = $client->createRequest()
+                ->setMethod('PUT')
+                ->setUrl($endpoint)
+                ->setData([
+                    'closing_water_readings' => $closing_reading,
+                    'id' => $id
+                ])
+                ->setOptions([
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false
+                ]);
+
+            $response = $request->send();
+
+            if ($response) {
+                return $response->data();
+            } else {
+                return $response->statusCode . ':' . $response->content;
+            }
+        } catch (\Exception $e) {
+            return "HTTP request failed with error: " . $e->getTraceAsString();
+        }
+
+
+
     }
 
 }

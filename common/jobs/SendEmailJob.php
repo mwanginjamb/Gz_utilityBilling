@@ -22,6 +22,8 @@ class SendEmailJob extends BaseObject implements JobInterface
             // Yii::info('Tenant  to invoice: ' . VarDumper::dumpAsString($paymentLine->tenant), 'jobInfo');
             if ($paymentLine) {
                 $this->sendPaymentLineNotification($paymentLine);
+                $paymentLine->invoiced = true;
+                $paymentLine->save(false);
             }
 
         } catch (\Exception $e) {
@@ -37,11 +39,13 @@ class SendEmailJob extends BaseObject implements JobInterface
         // Construct the email content based on payment line data
         $subject = "Payment Notification for Invoice #" . 'KAV-INV-' . $paymentLine->id;
         $body = "Dear " . $paymentLine->tenant->principle_tenant_name . ", \n\nWe are notifying you about your invoice #" . 'KAV-INV-' . $paymentLine->id .
-            " with a rent amount of " . Yii::$app->formatter->asCurrency($paymentLine->tenant->agreed_rent_payable + $paymentLine->tenant->agreed_water_rate, 'Ksh.') .
+            " with a rent amount of " . Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable + $paymentLine->water_bill + $paymentLine->service_charge, 'Ksh.') .
             "\n\n Break Down:" .
             "\n\n Rent: " . Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable, 'Ksh.') .
-            "\n\n Water: " . Yii::$app->formatter->asCurrency($paymentLine->agreed_water_rate, 'Ksh.') .
-            "\n\n Total: " . Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable + $paymentLine->agreed_water_rate, 'Ksh.') .
+            "\n\n Water: " . Yii::$app->formatter->asCurrency($paymentLine->water_bill, 'Ksh.') . ' Units consumed: ' . $paymentLine->units_used .
+            "\n\n Garbage: " . Yii::$app->formatter->asCurrency($paymentLine->service_charge, 'Ksh.') .
+
+            "\n\n Total: " . Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable + $paymentLine->water_bill + $paymentLine->service_charge, 'Ksh.') .
 
             ".\n\nThank you for your attention.";
         Yii::info('Successfull billing for : ' . $body, 'jobInfo');
