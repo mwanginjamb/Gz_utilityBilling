@@ -60,7 +60,7 @@ function closeInput(elm) {
     }
 
     // Post Changes
-    $.post('./commit', { 'key': data.key, 'name': data.name, 'no': data.no, 'filterKey': data.filterField, 'service': data.service, 'value': value }).done(function (msg) {
+    $.post('./commit', { 'key': data.key, 'name': data.name, 'service': data.service, 'value': value }).done(function (msg) {
 
         // Update all key dataset values for the row
         if (msg.Key) {

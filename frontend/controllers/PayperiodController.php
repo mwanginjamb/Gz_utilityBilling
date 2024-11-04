@@ -245,9 +245,9 @@ class PayperiodController extends Controller
             $request = $client->createRequest()
                 ->setMethod('PUT')
                 ->setUrl($endpoint)
+                ->addHeaders(['Content-Type' => 'application/json'])
                 ->setData([
                     'closing_water_readings' => $closing_reading,
-                    'id' => $id
                 ])
                 ->setOptions([
                     CURLOPT_SSL_VERIFYPEER => false,
