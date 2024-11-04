@@ -49,7 +49,6 @@ return [
                 [
                     'class' => UrlRule::class,
                     'controller' => PaymentlinesController::class,
-                    'only' => ['index', 'view', 'create', 'update'],
                     'pluralize' => false
                 ]
             ],
