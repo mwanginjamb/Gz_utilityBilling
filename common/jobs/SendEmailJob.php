@@ -17,6 +17,7 @@ class SendEmailJob extends BaseObject implements JobInterface
                 ->joinWith('tenant')
                 ->andWhere(['paymentlines.id' => $this->paymentLineId])
                 ->andWhere(['not', ['tenant.id' => NULL]])
+                ->andWhere(['invoiced' => NULL])
                 ->one();
             // Yii::info('PaymentLine to invoice: ' . VarDumper::dumpAsString($paymentLine), 'jobInfo');
             // Yii::info('Tenant  to invoice: ' . VarDumper::dumpAsString($paymentLine->tenant), 'jobInfo');

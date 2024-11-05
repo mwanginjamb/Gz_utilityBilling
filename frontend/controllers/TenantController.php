@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Paymentlines;
 use common\models\Tenant;
 use common\models\TenantSearch;
 use yii\web\Controller;
@@ -58,6 +59,7 @@ class TenantController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'invoices' => Paymentlines::find()->joinWith('tenant')->where(['tenant_id' => $id])->all(),
         ]);
     }
 

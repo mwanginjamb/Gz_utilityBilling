@@ -124,7 +124,10 @@ class PayperiodController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'properties' => ArrayHelper::map(Property::find()->all(), 'id', 'name')
+            'properties' => ArrayHelper::map(Property::find()->all(), 'id', 'name'),
+            'payperiodstatus' => ArrayHelper::map(Payperiodstatus::find()->all(), 'id', 'name'),
+            'paymentheader' => []
+
         ]);
     }
 
@@ -180,13 +183,13 @@ class PayperiodController extends Controller
     {
 
         $paymentHeader = new Paymentheader();
-        $paymentHeader->payperiod_id = \Yii::$app->request->post('payperiod');
-        $paymentHeader->property_id = \Yii::$app->request->post('property');
+        $paymentHeader->payperiod_id = Yii::$app->request->post('payperiod');
+        $paymentHeader->property_id = Yii::$app->request->post('property');
 
         if ($paymentHeader->save()) {
-            \Yii::$app->session->setFlash('success', 'Payment Header for this property and period has been created.');
+            Yii::$app->session->setFlash('success', 'Payment Header for this property and period has been created.');
         } else {
-            \Yii::$app->session->setFlash('error', 'Could not create a payperiod payment header.');
+            Yii::$app->session->setFlash('error', 'Could not create a payperiod payment header.');
         }
         return $this->redirect(['view', 'id' => \Yii::$app->request->post('payperiod')]);
     }

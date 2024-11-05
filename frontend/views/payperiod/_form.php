@@ -14,7 +14,7 @@ $date = 'Rent Period Ending ' . date('M, Y');
 <div class="row my-3">
     <div class="col">
         <div class="paymentheader-actions">
-            <?= ($model->payperiodstatus->name == 'Open') ? Html::a(Yii::t('app', 'Close Pay period'), ['close'], [
+            <?= (!$model->isNewRecord && $model->payperiodstatus->name == 'Open') ? Html::a(Yii::t('app', 'Close Pay period'), ['close'], [
                 'class' => 'btn btn-warning',
                 'data' => [
                     'confirm' => Yii::t('app', 'Are you sure you want to close this pay period ?'),
@@ -24,7 +24,7 @@ $date = 'Rent Period Ending ' . date('M, Y');
                     'method' => 'post',
                 ],
             ]) : '' ?>
-            <?= (!$paymentheader || !is_array($paymentheader['paymentlines'])) ? Html::a(Yii::t('app', 'Generate Payment Header'), ['generate-header'], [
+            <?= (!$model->isNewRecord && !$paymentheader || array_key_exists('paymentlines', $paymentheader)) ? Html::a(Yii::t('app', 'Generate Payment Header'), ['generate-header'], [
                 'class' => 'btn btn-info',
                 'data' => [
                     'confirm' => Yii::t('app', 'Are you sure you want to generate payment header for this pay period?'),
@@ -35,7 +35,7 @@ $date = 'Rent Period Ending ' . date('M, Y');
                     'method' => 'post',
                 ],
             ]) : '' ?>
-            <?= (($paymentheader && is_array($paymentheader['paymentlines'])) && $model->payperiodstatus->name == 'Open') ? Html::a(Yii::t('app', 'Invoice Tenants'), ['invoice'], [
+            <?= (!$model->isNewRecord && ($paymentheader && is_array($paymentheader['paymentlines'])) && $model->payperiodstatus->name == 'Open') ? Html::a(Yii::t('app', 'Invoice Tenants'), ['invoice'], [
                 'class' => 'btn btn-success',
                 'data' => [
                     'confirm' => Yii::t('app', 'Are you sure you want to Invoice tenants in this property for this pay period ?'),

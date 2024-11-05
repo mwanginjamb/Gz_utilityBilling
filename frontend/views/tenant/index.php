@@ -46,15 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= Yii::$app->formatter->asCurrency($model->agreed_water_rate, 'Ksh') ?></td>
                             <td><?= Yii::$app->formatter->asBoolean($model->has_signed_tenancy_agreement) ?></td>
                             <td>
-                                <?= $Viewlink = Html::a('<i class="fas fa-eye"></i> View', ['view'], [
+                                <?= $Viewlink = Html::a('<i class="fas fa-eye"></i> View', ['view', 'id' => $model->id], [
                                     'class' => 'btn btn-outline-primary btn-xs mx-1',
                                     'title' => 'View Document',
-                                    'data' => [
-                                        'params' => [
-                                            'id' => $model->id
-                                        ],
-                                        'method' => 'GET'
-                                    ]
+
 
                                 ]); ?>
                             </td>

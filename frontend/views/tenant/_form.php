@@ -27,6 +27,7 @@ use yii\bootstrap5\ActiveForm;
     <?= $form->field($model, 'agreed_rent_payable')->textInput(['type' => 'number']) ?>
 
     <?= $form->field($model, 'agreed_water_rate')->textInput(['type' => 'number']) ?>
+    <?= $form->field($model, 'service_charge')->textInput(['type' => 'number']) ?>
 
     <?= $form->field($model, 'has_signed_tenancy_agreement')->checkbox() ?>
 

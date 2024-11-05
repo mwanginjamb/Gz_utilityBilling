@@ -21,6 +21,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $has_signed_tenancy_agreement
  * @property int|null $created_at
  * @property int|null $update_at
+ * @property double|null $service_charge
  */
 class Tenant extends \yii\db\ActiveRecord
 {
@@ -55,7 +56,8 @@ class Tenant extends \yii\db\ActiveRecord
             [['billing_email_address', 'id_number'], 'string', 'max' => 50],
             ['billing_email_address', 'email'],
             ['house_number', 'unique'],
-            ['property', 'string']
+            ['property', 'string'],
+            ['service_charge', 'double'],
         ];
     }
 
@@ -84,6 +86,11 @@ class Tenant extends \yii\db\ActiveRecord
     public function getUnit()
     {
         return $this->hasOne(Unit::class, ['id' => 'house_number']);
+    }
+
+    public function getPayments()
+    {
+        return $this->hasMany(Paymentlines::class, ['tenant_id' => 'id']);
     }
 
 

@@ -148,6 +148,7 @@ class Paymentheader extends \yii\db\ActiveRecord
                         'tenant_name' => $tenant->principle_tenant_name,
                         'agreed_rent_payable' => $tenant->agreed_rent_payable,
                         'agreed_water_rate' => $tenant->agreed_water_rate,
+                        'service_charge' => $tenant->service_charge
                     ];
                 }
 
@@ -168,7 +169,8 @@ class Paymentheader extends \yii\db\ActiveRecord
                         'tenant_id',
                         'tenant_name',
                         'agreed_rent_payable',
-                        'agreed_water_rate'
+                        'agreed_water_rate',
+                        'service_charge'
                     ],
                     $paymentLines
                 )->execute();
