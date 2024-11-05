@@ -147,7 +147,8 @@ class PayperiodController extends Controller
         return $this->render('update', [
             'model' => $model,
             'properties' => ArrayHelper::map(Property::find()->all(), 'id', 'name'),
-            'payperiodstatus' => ArrayHelper::map(Payperiodstatus::find()->all(), 'id', 'name')
+            'payperiodstatus' => ArrayHelper::map(Payperiodstatus::find()->all(), 'id', 'name'),
+            'paymentheader' => Paymentheader::find()->joinWith('paymentlines')->where(['payperiod_id' => $model->id, 'property_id' => $model->property_id])->asArray()->one()
         ]);
     }
 
