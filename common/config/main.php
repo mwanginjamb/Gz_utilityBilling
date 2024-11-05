@@ -45,6 +45,15 @@ return [
                     'maxFileSize' => 10240, // Maximum log file size in KB
                     'maxLogFiles' => 10, // Number of log files to keep
                 ],
+                [
+                    'class' => \yii\log\FileTarget::class,
+                    'levels' => ['info'],
+                    'categories' => ['dbinfo'], // Custom category for job errors
+                    'logFile' => '@runtime/logs/db-ops.log', // Path to the log file
+                    'logVars' => [], // Exclude variables like $_SERVER, $_POST, etc., if unnecessary
+                    'maxFileSize' => 10240, // Maximum log file size in KB
+                    'maxLogFiles' => 10, // Number of log files to keep
+                ],
             ],
         ],
     ],

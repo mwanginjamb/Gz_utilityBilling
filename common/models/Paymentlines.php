@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\VarDumper;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 
@@ -21,6 +22,11 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $deleted
  * @property int|null $deleted_at
  * @property int|null $deleted_by
+ * @property int|null $tenant_id
+ * @property int|null $tenant_id
+ * @property int|null $agreed_rent_payable
+ * @property int|null $agreed_water_rate
+ * @property int|null $service_charge
  *
  * @property Paymentheader $paymentheader
  */
@@ -102,6 +108,28 @@ class Paymentlines extends \yii\db\ActiveRecord
     public static function find()
     {
         return new PaymentlinesQuery(get_called_class());
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if ($insert) {
+            $currentHeader = $this->paymentheader;
+
+            $previousPaymentline = self::find()
+                ->joinWith('paymentheader')
+                ->where(['paymentline.tenant_id' => $this->tenant_id])
+                ->andWhere(['paymentheader.property_id' => $currentHeader->property_id])
+                ->andWhere(['<', 'paymentheader.payperiod_id', $currentHeader->payperiod_id])
+                ->orderBy(['paymentheader.id' => SORT_DESC])
+                ->one();
+
+            Yii::info('Previous Line for header:  ' . $currentHeader->id ?? ' [None prev header]' . VarDumper::dumpAsString($previousPaymentline), 'dbinfo');
+
+            if ($previousPaymentline) {
+                $this->updateAttributes(['opening_water_readings' => $previousPaymentline->closing_water_readings]);
+            }
+        }
     }
 
 

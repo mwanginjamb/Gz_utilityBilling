@@ -127,6 +127,27 @@ class Paymentheader extends \yii\db\ActiveRecord
         }
     }
 
+    // Bulk update function for batch processing
+    public function updateOpeningReadingsBatch()
+    {
+        $header = Paymentheader::findOne($this->id);
+        $currentLines = Paymentlines::find()->where(['paymentheader_id' => $header->id])->all();
+        foreach ($currentLines as $line) {
+            $previousLine = Paymentlines::find()
+                ->joinWith('paymentheader')
+                ->where(['paymentheader.property_id' => $header->property_id])
+                ->andWhere(['paymentlines.tenant_id' => $line->tenant_id])
+                ->andWhere(['<', 'paymentheader.payperiod_id', $header->payperiod_id])
+                ->orderBy(['paymentheader.payperiod_id' => SORT_DESC])
+                ->one();
+
+            if ($previousLine) {
+                $line->updateAttributes(['opening_water_readings' => $previousLine->closing_water_readings]);
+            }
+        }
+
+    }
+
     protected function generateInvoiceLines()
     {
         $property = $this->property;
@@ -175,6 +196,7 @@ class Paymentheader extends \yii\db\ActiveRecord
                     $paymentLines
                 )->execute();
             }
+            $this->updateOpeningReadingsBatch();
         }
         return null;
     }

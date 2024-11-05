@@ -191,7 +191,7 @@ class PayperiodController extends Controller
         } else {
             Yii::$app->session->setFlash('error', 'Could not create a payperiod payment header.');
         }
-        return $this->redirect(['view', 'id' => \Yii::$app->request->post('payperiod')]);
+        return $this->redirect(['update', 'id' => Yii::$app->request->post('payperiod')]);
     }
 
     /**

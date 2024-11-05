@@ -106,6 +106,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php if ($paymentheader && is_array($paymentheader['paymentlines'])): ?>
 
 
+                    <div class="row my-3">
+                        <div class="w-100 d-flex border border-1 border-info p-3 ">
+                            <div class="col-md-6 label">Payment Header:</div>
+                            <div class="col-md-6 val"><?= $paymentheader['id'] ?></div>
+                        </div>
+                    </div>
 
 
                     <table class="table table-bordered" id="paymentlines">
