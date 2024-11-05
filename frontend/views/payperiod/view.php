@@ -113,47 +113,49 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                     </div>
 
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="paymentlines">
+                            <thead>
+                                <tr>
 
-                    <table class="table table-bordered" id="paymentlines">
-                        <thead>
-                            <tr>
-
-                                <td class="info text-bold">Tenant Name</td>
-                                <td class="info text-bold">Rent</td>
-                                <td class="info text-bold">Water Rate/Unit</td>
-                                <td class="info text-bold">Opening Water Reading</td>
-                                <td class="info text-bold">Closing Water Reading</td>
-                                <td class="info text-bold">Units Consumed</td>
-                                <td class="info text-bold">Water Bill</td>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($paymentheader['paymentlines'] as $line):
-                                $line = (object) $line;
-                                $class = ($line->invoiced === NULL) ? 'text' : 'text-danger';
-                                $endpoint = Url::home(true) . 'apiv1/invoicelines/' . $line->id
-                                    ?>
-                                <tr class="<?= $class ?>">
-
-                                    <td><?= $line->tenant_name ?></td>
-                                    <td><?= Yii::$app->formatter->asCurrency($line->agreed_rent_payable, 'Ksh.') ?></td>
-                                    <td><?= $line->agreed_water_rate ?></td>
-                                    <td><?= $line->opening_water_readings ?></td>
-                                    <td>
-                                        <?= $line->closing_water_readings ?>
-                                    </td>
-                                    <td><?= $line->units_used ?></td>
-                                    <td data-name="water_bill" class="water_bill">
-                                        <?= Yii::$app->formatter->asCurrency($line->water_bill, 'Ksh.') ?>
-                                    </td>
-
-
+                                    <td class="info text-bold">Tenant Name</td>
+                                    <td class="info text-bold">Rent</td>
+                                    <td class="info text-bold">Water Rate/Unit</td>
+                                    <td class="info text-bold">Opening Water Reading</td>
+                                    <td class="info text-bold">Closing Water Reading</td>
+                                    <td class="info text-bold">Units Consumed</td>
+                                    <td class="info text-bold">Water Bill</td>
 
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($paymentheader['paymentlines'] as $line):
+                                    $line = (object) $line;
+                                    $class = ($line->invoiced === NULL) ? 'text' : 'text-danger';
+                                    $endpoint = Url::home(true) . 'apiv1/invoicelines/' . $line->id
+                                        ?>
+                                    <tr class="<?= $class ?>">
+
+                                        <td><?= $line->tenant_name ?></td>
+                                        <td><?= Yii::$app->formatter->asCurrency($line->agreed_rent_payable, 'Ksh.') ?></td>
+                                        <td><?= $line->agreed_water_rate ?></td>
+                                        <td><?= $line->opening_water_readings ?></td>
+                                        <td>
+                                            <?= $line->closing_water_readings ?>
+                                        </td>
+                                        <td><?= $line->units_used ?></td>
+                                        <td data-name="water_bill" class="water_bill">
+                                            <?= Yii::$app->formatter->asCurrency($line->water_bill, 'Ksh.') ?>
+                                        </td>
+
+
+
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
                 <?php else: ?>
                     <div class="alert alert-info">Payment Lines are yet to be Generated for this Pay Period.</div>
                 <?php endif; ?>
