@@ -174,7 +174,7 @@ class Paymentheader extends \yii\db\ActiveRecord
                 }
 
 
-                Yii::$app->utility->log($paymentLines, 'line-' . $property->name . ' - ' . $this->payperiod->body);
+                // Yii::$app->utility->log($paymentLines, 'line-' . $property->name . ' - ' . $this->payperiod->body);
 
             }
 
