@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $item->body ?></td>
                             <td><?= $item->payperiodstatus->name ?></td>
                             <td>
-                                <?= Html::a('Update', ['update', 'id' => $item->id,], ['_target' => '_blank', 'class' => 'btn btn-warning']) ?>
+                                <?= Html::a('Update', ['update', 'id' => $item->id], ['_target' => '_blank', 'class' => 'btn btn-warning']) ?>
                                 <?= Html::a('view', ['view', 'id' => $item->id], ['target' => '_blank', , 'class' => 'btn btn-info']) ?>
                             </td>
                         </tr>
