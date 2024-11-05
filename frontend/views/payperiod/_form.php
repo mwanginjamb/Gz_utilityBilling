@@ -117,7 +117,7 @@ $date = 'Rent Period Ending ' . date('M, Y');
                                 ondblclick="addInput(this,'number')">
                                 <?= $line->opening_water_readings ?>
                             </td>
-                            <td data-key="<?= $line->id ?>" data-name="closing_water_readings"
+                            <td data-key="<?= $line->id ?>" data-name="closing_water_readings" data-reload="1"
                                 class="closing_water_readings text-info" data-service="<?= $endpoint ?>"
                                 ondblclick="addInput(this,'number')" data-validate="water_bill">
                                 <?= $line->closing_water_readings ?>

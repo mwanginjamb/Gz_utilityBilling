@@ -122,7 +122,7 @@ function closeInput(elm) {
         if (data.reload) {
             setTimeout(() => {
                 location.reload();
-            }, 500);
+            }, 60);
 
         }
 
