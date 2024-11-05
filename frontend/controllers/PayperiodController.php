@@ -83,7 +83,7 @@ class PayperiodController extends Controller
     public function actionPropertyPayperiods()
     {
         $id = \Yii::$app->request->post('id');
-        $payperiods = Payperiod::findAll(['property_id' => $id]);
+        $payperiods = Payperiod::find()->where(['property_id' => $id])->all();
 
         return $this->render('pperiods', [
             'items' => $payperiods

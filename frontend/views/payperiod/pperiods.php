@@ -31,14 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
             <tbody>
                 <?php
                 if (is_array($items) && count($items)):
+
                     foreach ($items as $item): ?>
                         <tr>
                             <td><?= $item->period ?></td>
                             <td><?= $item->body ?></td>
                             <td><?= $item->payperiodstatus->name ?></td>
                             <td>
-                                <?= Html::a('Update', ['update', 'id' => $item['id']], ['_target' => '_blank', 'class' => 'btn btn-warning']) ?>
-                                <?= Html::a('view', ['view', 'id' => $item['id']], ['target' => '_blank', , 'class' => 'btn btn-info']) ?>
+                                <?= ($item->payperiodstatus->name == 'Open') ? Html::a('Update', ['update', 'id' => $item->id], ['_target' => '_blank', 'class' => 'btn btn-warning']) : '' ?>
+                                <?= Html::a('view', ['view', 'id' => $item->id], ['target' => '_blank', 'class' => 'btn btn-info']) ?>
                             </td>
                         </tr>
                     <?php endforeach;

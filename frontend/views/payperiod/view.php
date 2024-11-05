@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="paymentheader-actions">
-                    <?= Html::a(Yii::t('app', 'Close Pay period'), ['close'], [
+                    <?= ($model->payperiodstatus->name == 'Open') ? Html::a(Yii::t('app', 'Close Pay period'), ['close'], [
                         'class' => 'btn btn-warning',
                         'data' => [
                             'confirm' => Yii::t('app', 'Are you sure you want to close this pay period ?'),
@@ -45,8 +45,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             'method' => 'post',
                         ],
-                    ]) ?>
-                    <?= Html::a(Yii::t('app', 'Generate Payment Header'), ['generate-header'], [
+                    ]) : '' ?>
+                    <?= (!$paymentheader || !is_array($paymentheader['paymentlines'])) ? Html::a(Yii::t('app', 'Generate Payment Header'), ['generate-header'], [
                         'class' => 'btn btn-info',
                         'data' => [
                             'confirm' => Yii::t('app', 'Are you sure you want to generate payment header for this pay period?'),
@@ -56,8 +56,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             'method' => 'post',
                         ],
-                    ]) ?>
-                    <?= Html::a(Yii::t('app', 'Invoice Tenants'), ['invoice'], [
+                    ]) : '' ?>
+                    <?= ($paymentheader && is_array($paymentheader['paymentlines'])) ? Html::a(Yii::t('app', 'Invoice Tenants'), ['invoice'], [
                         'class' => 'btn btn-success',
                         'data' => [
                             'confirm' => Yii::t('app', 'Are you sure you want to Invoice tenants in this property for this pay period ?'),
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             'method' => 'post',
                         ],
-                    ]) ?>
+                    ]) : '' ?>
 
                 </div>
             </div>
@@ -115,11 +115,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <td class="info text-bold">Tenant Name</td>
                                 <td class="info text-bold">Rent</td>
                                 <td class="info text-bold">Water Rate/Unit</td>
-                                <td class="info text-info text-bold">Opening Water Reading</td>
-                                <td class="info text-info text-bold">Closing Water Reading</td>
+                                <td class="info text-bold">Opening Water Reading</td>
+                                <td class="info text-bold">Closing Water Reading</td>
                                 <td class="info text-bold">Units Consumed</td>
                                 <td class="info text-bold">Water Bill</td>
-                                <td>Action</td>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -134,8 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= Yii::$app->formatter->asCurrency($line->agreed_rent_payable, 'Ksh.') ?></td>
                                     <td><?= $line->agreed_water_rate ?></td>
                                     <td><?= $line->opening_water_readings ?></td>
-                                    <td data-key="<?= $line->id ?>" data-name="closing_water_readings" data-service="<?= $endpoint ?>"
-                                        ondblclick="addInput(this,'number')" data-validate="water_bill">
+                                    <td>
                                         <?= $line->closing_water_readings ?>
                                     </td>
                                     <td><?= $line->units_used ?></td>
@@ -143,20 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <?= Yii::$app->formatter->asCurrency($line->water_bill, 'Ksh.') ?>
                                     </td>
 
-                                    <td>
-                                        <?= ($line->invoiced === NULL) ? Html::a('<i class="fas fa-eye"></i> Update', Url::toRoute(['paymentlines/update', 'id' => $line->id], $schema = true), [
-                                            'class' => 'btn btn-outline-primary btn-xs mx-1',
-                                            'title' => 'Update Invoice Line',
-                                            'data' => [
-                                                'params' => [
-                                                    'id' => $line->id,
-                                                    'tenant' => $line->tenant_name,
-                                                ],
-                                                'method' => 'GET'
-                                            ]
 
-                                        ]) : ''; ?>
-                                    </td>
 
                                 </tr>
                             <?php endforeach; ?>

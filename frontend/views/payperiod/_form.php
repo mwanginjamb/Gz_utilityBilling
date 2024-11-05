@@ -112,12 +112,14 @@ $date = 'Rent Period Ending ' . date('M, Y');
                             <td><?= $line->tenant_name ?></td>
                             <td><?= Yii::$app->formatter->asCurrency($line->agreed_rent_payable, 'Ksh.') ?></td>
                             <td><?= $line->agreed_water_rate ?></td>
-                            <td data-key="<?= $line->id ?>" data-name="opening_water_readings" class="text-info"
-                                data-service="<?= $endpoint ?>" ondblclick="addInput(this,'number')">
+                            <td data-key="<?= $line->id ?>" data-name="opening_water_readings"
+                                class="opening_water_readings text-info" data-service="<?= $endpoint ?>"
+                                ondblclick="addInput(this,'number')">
                                 <?= $line->opening_water_readings ?>
                             </td>
-                            <td data-key="<?= $line->id ?>" data-name="closing_water_readings" class="text-info"
-                                data-service="<?= $endpoint ?>" ondblclick="addInput(this,'number')" data-validate="water_bill">
+                            <td data-key="<?= $line->id ?>" data-name="closing_water_readings"
+                                class="closing_water_readings text-info" data-service="<?= $endpoint ?>"
+                                ondblclick="addInput(this,'number')" data-validate="water_bill">
                                 <?= $line->closing_water_readings ?>
                             </td>
                             <td><?= $line->units_used ?></td>
