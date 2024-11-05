@@ -154,7 +154,7 @@ class Paymentheader extends \yii\db\ActiveRecord
         $occupiedUnits = Unit::find()->joinWith('tenant')
             ->andWhere(['property_id' => $property->id])
             ->andWhere(['not', ['tenant.id' => NULL]])->all();
-        Yii::$app->utility->log(ArrayHelper::map($occupiedUnits, 'id', 'unit_name'), 'property-units' . $property->name);
+        // Yii::$app->utility->log(ArrayHelper::map($occupiedUnits, 'id', 'unit_name'), 'property-units' . $property->name);
         $paymentLines = [];
         if ($occupiedUnits) {
             foreach ($occupiedUnits as $unit) {
