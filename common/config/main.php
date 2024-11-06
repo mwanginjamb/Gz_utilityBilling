@@ -1,4 +1,6 @@
 <?php
+
+use kartik\mpdf\Pdf;
 return [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -55,6 +57,13 @@ return [
                     'maxLogFiles' => 10, // Number of log files to keep
                 ],
             ],
+        ],
+        'pdf' => [
+            'class' => Pdf::class,
+            'mode' => Pdf::MODE_CORE,
+            'format' => Pdf::FORMAT_LEGAL,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_STRING
         ],
     ],
 

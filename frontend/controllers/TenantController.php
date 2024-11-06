@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use common\models\Paymentlines;
 use common\models\Tenant;
 use common\models\TenantSearch;
+use kartik\mpdf\Pdf;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -133,5 +134,49 @@ class TenantController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionViewInvoice($invoiceid)
+    {
+        $line = Paymentlines::find()
+            ->joinwith('paymentheader')
+            ->joinWith('tenant')
+            ->where(['paymentlines.id' => $invoiceid])
+            ->one();
+
+
+        return $this->renderPartial('_report', [
+            'line' => $line
+        ]);
+
+    }
+    public function actionReport($invoiceid)
+    {
+        $line = Paymentlines::find()
+            ->joinwith('paymentheader')
+            ->joinWith('tenant')
+            ->where(['paymentlines.id' => $invoiceid])
+            ->one();
+
+        $title = 'Rental Invoice';
+        $date = 'Generated on ' . date('F j Y H:i:s');
+
+        $content = $this->renderPartial('_invoice_template', [
+            'line' => $line
+        ]);
+
+        $pdf = \Yii::$app->pdf;
+        $pdf->content = $content;
+        $pdf->cssFile = './css/invoice.css';
+        $pdf->methods = [
+            'SetHeader' => [$title],
+            'SetFooter' => ['{PAGENO}']
+        ];
+        $binary = $pdf->render('', 'S');
+        $base64Content = chunk_split(base64_encode($binary));
+        return $this->render('_invoice', [
+            'content' => $base64Content
+        ]);
+
     }
 }

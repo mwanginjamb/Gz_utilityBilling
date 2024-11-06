@@ -23,7 +23,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $deleted_at
  * @property int|null $deleted_by
  * @property int|null $tenant_id
- * @property int|null $tenant_id
+ * @property int|null $tenant_name
  * @property int|null $agreed_rent_payable
  * @property int|null $agreed_water_rate
  * @property int|null $service_charge
