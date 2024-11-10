@@ -11,6 +11,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
+    'name' => env('APP_NAME'),
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
