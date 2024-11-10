@@ -46,7 +46,7 @@ class SendEmailJob extends BaseObject implements JobInterface
             Yii::$app
                 ->mailer
                 ->compose(
-                    ['html' => 'emailInvoice'],
+                    ['html' => 'emailInvoice-html'],
                     ['paymentLine' => $paymentLine]
                 )
                 ->setFrom(env('SMTP_USERNAME'))
