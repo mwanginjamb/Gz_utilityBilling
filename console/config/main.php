@@ -50,6 +50,13 @@ return [
                 ],
             ],
         ],
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            'baseUrl' => env('APP_BASE_URL'),  // Replace with your actual domain
+            'hostInfo' => env('APP_BASE_URL'),  // Full host URL
+            'enablePrettyUrl' => true,               // Set to true if you are using pretty URLs
+            'showScriptName' => false,               // Hide index.php if not using it in URL paths
+        ],
     ],
     'params' => $params,
 ];
