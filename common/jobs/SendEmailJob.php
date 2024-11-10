@@ -43,7 +43,7 @@ class SendEmailJob extends BaseObject implements JobInterface
         Yii::info('Successfull billing for invoice : ' . $paymentLine->id, 'jobInfo');
         try {
             // Use Yii's mailer component to send the email
-            Yii::$app
+            $mail = Yii::$app
                 ->mailer
                 ->compose(
                     ['html' => 'emailInvoice-html'],
@@ -53,7 +53,7 @@ class SendEmailJob extends BaseObject implements JobInterface
                 ->setTo($paymentLine->tenant->billing_email_address)  // Assuming each line has an associated customer email
                 ->setSubject($subject)
                 ->send();
-
+            Yii::info('Invoice mailed successfully : ' . VarDumper::dumpAsString($mail), 'jobInfo');
             return ['status' => 'success', 'invoice_id' => $paymentLine->id];
         } catch (\Exception $e) {
             // Log and return the error message
