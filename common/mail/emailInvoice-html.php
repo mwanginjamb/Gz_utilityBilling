@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var common\models\User $user */
 
-Yii::$app->urlManager->hostInfo = env('APP_BASE_URL', 'http://utility.com');
-$verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['tenant/view-invoice', 'invoiceid' => $paymentLine->id]);
+//Yii::$app->urlManager->hostInfo = env('APP_BASE_URL', 'http://utility.com');
+// $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['tenant/view-invoice', 'invoiceid' => $paymentLine->id]);
 ?>
 <div class="verify-email" style="background-color:#ddd; padding: 1rem; display: flex;flex-direction:column">
     <p>Payment Notification for Invoice # KAV-INV-<?= $paymentLine->id ?></p>
@@ -42,7 +42,7 @@ $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['tenant/view-invoice', '
 
 <p>You can also verify the invoice via link below :</p>
 <div class="button-container">
-    <?= Html::a('Verify Invoice', $verifyLink, ['class' => 'btn']) ?></p>
+    <?php //Html::a('Verify Invoice', $verifyLink, ['class' => 'btn']) ?></p>
 </div>
 <footer>
     <p>&copy; <?= date('Y') ?> <?= env('DEVELOPER') ?> &copy; <?= date('Y') ?> All rights reserved.</p>
