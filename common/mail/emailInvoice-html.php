@@ -5,6 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var common\models\User $user */
 
+Yii::$app->urlManager->hostInfo = env('APP_BASE_URL', 'http://utility.com');
 $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['tenant/view-invoice', 'invoiceid' => $paymentLine->id]);
 ?>
 <div class="verify-email" style="background-color:#ddd; padding: 1rem; display: flex;flex-direction:column">
