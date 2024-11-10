@@ -85,9 +85,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <td class="text-bold">Unit</td>
                                         <td class="text-bold">Principal Member</td>
                                         <td class="text-bold">Rent Payable</td>
-                                        <td class="text-bold">Water Cost Per Unit </td>
+
                                         <td class="text-bold">Cell Number</td>
                                         <td class="text-bold">Billing Address</td>
+                                        <td>Action</td>
 
                                     </tr>
                                 </thead>
@@ -103,10 +104,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 <td><?= $unit->tenant['principle_tenant_name'] ?></td>
                                                 <td><?= Yii::$app->formatter->asCurrency($unit->tenant['agreed_rent_payable'], 'Ksh.') ?>
                                                 </td>
-                                                <td><?= Yii::$app->formatter->asCurrency($unit->tenant['agreed_water_rate'], 'Ksh.') ?>
-                                                </td>
                                                 <td><?= $unit->tenant['cell_number'] ?></td>
                                                 <td><?= $unit->tenant['billing_email_address'] ?></td>
+                                                <td><?= Html::a(Yii::t('app', '<i class="fas fa-edit"></i>Update'), ['tenant/update', 'id' => $unit->id, 'property' => $model->id], ['class' => 'btn btn-outline-info']) ?>
+                                                </td>
                                             </tr>
                                         <?php endforeach;
                                     endif;

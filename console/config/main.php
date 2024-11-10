@@ -43,7 +43,7 @@ return [
                     'class' => \yii\log\FileTarget::class,
                     'levels' => ['error', 'warning', 'info'],
                     'categories' => ['jobErrors', 'jobInfo'], // Custom category for job errors
-                    'logFile' => '@runtime/logs/console.log', // Path to the log file
+                    'logFile' => '@runtime/logs/terminal.log', // Path to the log file
                     'logVars' => [], // Exclude variables like $_SERVER, $_POST, etc., if unnecessary
                     'maxFileSize' => 10240, // Maximum log file size in KB
                     'maxLogFiles' => 10, // Number of log files to keep

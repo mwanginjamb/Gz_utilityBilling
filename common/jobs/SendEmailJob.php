@@ -36,10 +36,9 @@ class SendEmailJob extends BaseObject implements JobInterface
 
     public function sendPaymentLineNotification($paymentLine)
     {
-        Yii::info('Invoicing line: ' . VarDumper::dumpAsString($paymentLine->id), 'jobInfo');
+        Yii::info('Invoicing line: ' . $paymentLine->id, 'jobInfo');
         // Construct the email content based on payment line data
         $subject = "Payment Notification for Invoice #" . 'KAV-INV-' . $paymentLine->id;
-
         Yii::info('Successfull billing for invoice : ' . $paymentLine->id, 'jobInfo');
         try {
             // Use Yii's mailer component to send the email

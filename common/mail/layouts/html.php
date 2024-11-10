@@ -15,8 +15,6 @@ use yii\helpers\Html;
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=<?= Yii::$app->charset ?>" />
     <title><?= Html::encode($this->title) ?></title>
-    <script rel="stylesheet" href="<?= Url::to(Yii::getAlias('@frontendWeb') . '/css/invoice.css', $schema = true) ?>"
-        charset="text/css"></script>
     <?php $this->head() ?>
 </head>
 

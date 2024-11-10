@@ -13,38 +13,45 @@ use yii\widgets\Pjax;
 $this->title = Yii::t('app', 'Payperiodstatuses');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="payperiodstatus-index">
+<div class="payperiodstatus-index card card-info">
+    <div class="card-header">
+        <div class="card-title">
+            <h1><?= Html::encode($this->title) ?></h1>
+        </div>
+        <div class="card-tools">
+            <?= Html::a(Yii::t('app', '+ Payperiodstatus'), ['create'], ['class' => 'btn btn-outline-warning']) ?>
+        </div>
+    </div>
+    <div class="card-body">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+        <?php Pjax::begin(); ?>
+        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Payperiodstatus'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            //'id',
-            'name',
-            'created_at:datetime',
-            'update_at:datetime',
-            //'created_by',
-            //'updated_by',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Payperiodstatus $model, $key, $index, $column) {
-                        return Url::toRoute([$action, 'id' => $model->id]);
-                    }
+                //'id',
+                'name',
+                'created_at:datetime',
+                'update_at:datetime',
+                //'created_by',
+                //'updated_by',
+                [
+                    'class' => ActionColumn::className(),
+                    'urlCreator' => function ($action, Payperiodstatus $model, $key, $index, $column) {
+                                return Url::toRoute([$action, 'id' => $model->id]);
+                            }
+                ],
             ],
-        ],
-    ]); ?>
+        ]); ?>
 
-    <?php Pjax::end(); ?>
+        <?php Pjax::end(); ?>
+    </div>
+
+
+
 
 </div>
