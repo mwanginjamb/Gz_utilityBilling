@@ -29,3 +29,99 @@ th {
     align-items: center;
     justify-content: center;
 }
+
+/*email*/
+
+/* Container for the entire invoice */
+.invoice-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    margin-top: 1rem;
+}
+
+/* Individual line items in two columns */
+.invoice-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Styling for item name */
+.item {
+    flex: 1;
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 12px;
+    text-align: left;
+    border-radius: 5px;
+    max-width: 150px;
+}
+
+/* Styling for item cost */
+.cost {
+    flex: 1;
+    color: #007bff;
+    padding: 12px;
+    text-align: right;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    max-width: 100px;
+}
+
+.invoice-line:last-child .item,
+.invoice-line:last-child .cost {
+    background-color: #0056b3;
+    /* Darker blue to highlight total */
+    color: #ffffff;
+    font-weight: bold;
+    border: none;
+    /* Remove border for a cohesive look */
+}
+
+/* Styling for the footer */
+.invoice-footer {
+    margin-top: 20px;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    color: #666666;
+    border-top: 1px solid #dddddd;
+}
+
+.invoice-footer p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Container to center the button */
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Styling for the verify button */
+.verify-button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.verify-button:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}
+
+.verify-button:focus {
+    outline: none;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}

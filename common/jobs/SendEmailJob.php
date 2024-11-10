@@ -39,24 +39,19 @@ class SendEmailJob extends BaseObject implements JobInterface
         Yii::error($paymentLine->tenant);
         // Construct the email content based on payment line data
         $subject = "Payment Notification for Invoice #" . 'KAV-INV-' . $paymentLine->id;
-        $body = "Dear " . $paymentLine->tenant->principle_tenant_name . ", \n\nWe are notifying you about your invoice #" . 'KAV-INV-' . $paymentLine->id .
-            " with a rent amount of " . Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable + $paymentLine->water_bill + $paymentLine->service_charge, 'Ksh.') .
-            "\n\n Break Down:" .
-            "\n\n Rent: " . Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable, 'Ksh.') .
-            "\n\n Water: " . Yii::$app->formatter->asCurrency($paymentLine->water_bill, 'Ksh.') . ' Units consumed: ' . $paymentLine->units_used .
-            "\n\n Garbage: " . Yii::$app->formatter->asCurrency($paymentLine->service_charge, 'Ksh.') .
 
-            "\n\n Total: " . Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable + $paymentLine->water_bill + $paymentLine->service_charge, 'Ksh.') .
-
-            ".\n\nThank you for your attention.";
-        Yii::info('Successfull billing for : ' . $body, 'jobInfo');
+        Yii::info('Successfull billing for invoice : ' . $paymentLine->id, 'jobInfo');
         try {
             // Use Yii's mailer component to send the email
-            Yii::$app->mailer->compose()
-                ->setFrom('billing@yourdomain.com')
+            Yii::$app
+                ->mailer
+                ->compose(
+                    ['html' => 'emailInvoice'],
+                    ['paymentLine' => $paymentLine]
+                )
+                ->setFrom(env('SMTP_USERNAME'))
                 ->setTo($paymentLine->tenant->billing_email_address)  // Assuming each line has an associated customer email
                 ->setSubject($subject)
-                ->setTextBody($body)
                 ->send();
 
             return ['status' => 'success', 'invoice_id' => $paymentLine->id];
