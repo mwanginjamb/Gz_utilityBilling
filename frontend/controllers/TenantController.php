@@ -2,13 +2,16 @@
 
 namespace frontend\controllers;
 
-use common\models\Paymentlines;
-use common\models\Tenant;
-use common\models\TenantSearch;
+use Yii;
 use kartik\mpdf\Pdf;
+use common\models\Unit;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use common\models\Tenant;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use common\models\Paymentlines;
+use common\models\TenantSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * TenantController implements the CRUD actions for Tenant model.
@@ -72,6 +75,7 @@ class TenantController extends Controller
     public function actionCreate()
     {
         $model = new Tenant();
+        $units = Unit::find()->where(['property_id' => Yii::$app->request->get('property')])->all();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -83,6 +87,7 @@ class TenantController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'units' => ArrayHelper::map($units, 'id', 'unit_name')
         ]);
     }
 
@@ -96,6 +101,7 @@ class TenantController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $units = Unit::find()->where(['property_id' => Yii::$app->request->get('property')])->all();
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -103,6 +109,7 @@ class TenantController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'units' => ArrayHelper::map($units, 'id', 'unit_name')
         ]);
     }
 

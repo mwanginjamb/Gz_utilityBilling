@@ -5,7 +5,7 @@
 
 
 //make all selectboxes searchable
-//$('select').select2();
+$('select').select2();
 //Initialize Sweet Alert
 
 const Toast = Swal.mixin({

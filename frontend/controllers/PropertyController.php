@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use common\models\PropertySearch;
 use yii\web\NotFoundHttpException;
+use Yii;
 
 /**
  * PropertyController implements the CRUD actions for Property model.
@@ -105,6 +106,7 @@ class PropertyController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+
         ]);
     }
 

@@ -34,7 +34,8 @@ class AdminlteAsset extends AssetBundle
 
         // 'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css',
 
-        'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css',
+        // 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css',
+        '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css',
         // 'css/steps.css',
         // 'css/validation.css',
         'css/dblClick.mobile.css',
@@ -73,8 +74,8 @@ class AdminlteAsset extends AssetBundle
         'plugins/chart.js/Chart.min.js',
         'plugins/sweetalert2/sweetalert2.min.js',
 
+        '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js',
 
-        //'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js',
         'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js',
         'https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js ',
         // 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js',
@@ -82,7 +83,7 @@ class AdminlteAsset extends AssetBundle
         //'Js/app.js',
         'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js',
         'https://cdn.jsdelivr.net/npm/sweetalert2@9', //Sweet Alert
-        'https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.js',
+        //'https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.js',
 
 
     ];

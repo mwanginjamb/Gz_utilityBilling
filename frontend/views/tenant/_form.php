@@ -14,22 +14,62 @@ use yii\bootstrap5\ActiveForm;
 
     <?php // $form->field($model, 'user_id')->textInput() ?>
 
-    <?= $form->field($model, 'principle_tenant_name')->textInput(['maxlength' => true]) ?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'principle_tenant_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'house_number')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'house_number')->dropDownList($units, ['prompt' => 'select ...']) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'cell_number')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'cell_number')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'billing_email_address')->textInput(['maxlength' => true, 'type' => 'email']) ?>
 
-    <?= $form->field($model, 'billing_email_address')->textInput(['maxlength' => true, 'type' => 'email']) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $form->field($model, 'id_number')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'id_number')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'agreed_rent_payable')->textInput(['type' => 'number']) ?>
 
-    <?= $form->field($model, 'agreed_rent_payable')->textInput(['type' => 'number']) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
 
-    <?= $form->field($model, 'agreed_water_rate')->textInput(['type' => 'number']) ?>
-    <?= $form->field($model, 'service_charge')->textInput(['type' => 'number']) ?>
+            <?= $form->field($model, 'agreed_water_rate')->textInput(['type' => 'number']) ?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'service_charge')->textInput(['type' => 'number']) ?>
 
-    <?= $form->field($model, 'has_signed_tenancy_agreement')->checkbox() ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'has_signed_tenancy_agreement')->checkbox() ?>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
 
 
 

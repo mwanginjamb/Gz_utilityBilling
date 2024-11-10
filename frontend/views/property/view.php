@@ -65,7 +65,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-md-8">
                 <div class="card card-info">
                     <div class="card-header">
-                        <div class="card-title">Current Tenants</div>
+                        <div class="card-title">
+                            <h2>Current Tenants</h2>
+                        </div>
+                        <div class="card-tools">
+                            <?= Html::a(Yii::t('app', '<i class="fas fa-users"></i> Add Tenant'), ['tenant/create', 'property' => $model->id], ['class' => 'btn btn-warning']) ?>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
