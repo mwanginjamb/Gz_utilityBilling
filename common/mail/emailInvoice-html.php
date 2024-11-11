@@ -20,19 +20,19 @@ $verifyLink = env('APP_BASE_URL', 'http://utility.com') . '/tenant/view-invoice?
         "\n\n Please find the Break Down below : </div>" ?>
 
     <div class="invoice-container"
-        style="display: flex;flex-direction: column;gap:1px;padding: 20px;font-family: Arial, sans-serif;margin-top: 1rem; width:100%">
+        style="display:flex;flex-direction:column;gap:1px;padding: 20px;font-family: Arial, sans-serif;margin-top: 1rem; width:100%">
 
         <div class="invoice-line" style="display: flex;justify-content: space-between;align-items: center; width:80%">
             <div class="item" style="flex:1;background-color: #007bff;color: #ffffff;padding: 12px;text-align: left;">
                 Rent</div>
-            <div class="cost" style="flex: 1;color: #007bff;padding:12px;text-align:right;border: 1px solid #007bff;">
+            <div class="cost" style="flex:1;color:#007bff;padding:11px;text-align:right;border: 1px solid #007bff;">
                 <?= Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable, 'Ksh.') ?>
             </div>
         </div>
         <div class="invoice-line" style="display: flex;justify-content: space-between;align-items: center; width:80%">
             <div class="item" style="flex:1;background-color: #007bff;color: #ffffff;padding: 12px;text-align: left;">
                 Water</div>
-            <div class="cost" style="flex: 1;color: #007bff;padding:12px;text-align:right;border: 1px solid #007bff;">
+            <div class="cost" style="flex: 1;color: #007bff;padding:11px;text-align:right;border: 1px solid #007bff;">
                 <?= Yii::$app->formatter->asCurrency($paymentLine->water_bill, 'Ksh.') ?> Units Consumed:
                 <?= $paymentLine->units_used ?>
             </div>
@@ -40,18 +40,18 @@ $verifyLink = env('APP_BASE_URL', 'http://utility.com') . '/tenant/view-invoice?
         <div class="invoice-line" style="display: flex;justify-content: space-between;align-items: center; width:80%">
             <div class="item" style="flex:1;background-color: #007bff;color: #ffffff;padding: 12px;text-align: left;">
                 Garbage</div>
-            <div class="cost" style="flex: 1;color: #007bff;padding:12px;text-align:right;border: 1px solid #007bff;">
+            <div class="cost" style="flex:1;color: #007bff;padding:11px;text-align:right;border: 1px solid #007bff;">
                 <?= Yii::$app->formatter->asCurrency($paymentLine->service_charge, 'Ksh.') ?>
             </div>
         </div>
 
-        <div class="invoice-line" style="display: flex;justify-content: space-between; width:80%">
+        <div class="invoice-line" style="display:flex;justify-content:space-between; width:80%">
             <div class="item"
                 style="flex:1;background-color: #0056b3;color: #ffffff;padding:12px;font-weight: bold;border: none;">
                 Total
             </div>
             <div class="cost"
-                style="flex:1;background-color: #0056b3;color: #ffffff;padding:12px;text-align:right;font-weight: bold;border: none;">
+                style="flex:1;background-color:#0056b3;color: #ffffff;padding:11px;text-align:right;font-weight:bold;border: none;">
                 <?= Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable + $paymentLine->water_bill + $paymentLine->service_charge, 'Ksh.') ?>
             </div>
         </div>
@@ -63,8 +63,9 @@ $verifyLink = env('APP_BASE_URL', 'http://utility.com') . '/tenant/view-invoice?
 <div class="button-container" style="display: flex;justify-content: center;margin: 20px 0;">
     <?= Html::a('Verify Invoice', $verifyLink, ['style' => 'text-decoration:none;background-color: #007bff;color: #ffffff;border: none;padding: 10px 20px;font-size: 14px;font-weight: bold;cursor: pointer;border-radius: 5px;transition: background-color 0.3s;']) ?>
 </div>
-<footer
-    style="margin:1.5rem 0;padding: 10px;text-align: center;font-size: 12px;color: #666666;border-top: 1px solid #dddddd; background-color:#5a5757;">
-    <p style="margin: 0;line-height: 1.5;">&copy; <?= date('Y') ?> <?= env('DEVELOPER') ?> &copy; <?= date('Y') ?> All
-        rights reserved.</p>
+<footer style="margin:1.5rem 0;text-align: center;font-size: 12px;color: #666666;border-top: 1px solid #dddddd; ">
+    <p style="padding: 10px;background-color:#5a5757;margin: 0;line-height: 1.5;">&copy; <?= date('Y') ?>
+        <?= env('DEVELOPER') ?> &copy; <?= date('Y') ?> All
+        rights reserved.
+    </p>
 </footer>
