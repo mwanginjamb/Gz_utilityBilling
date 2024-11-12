@@ -8,47 +8,10 @@ use yii\widgets\ActiveForm;
 /** @var common\models\Payperiod $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$date = 'Rent Period Ending ' . date('M, Y');
+
 ?>
 
-<div class="row my-3">
-    <div class="col">
-        <div class="paymentheader-actions">
-            <?= (!$model->isNewRecord && $model->payperiodstatus->name == 'Open') ? Html::a(Yii::t('app', 'Close Pay period'), ['close'], [
-                'class' => 'btn btn-warning',
-                'data' => [
-                    'confirm' => Yii::t('app', 'Are you sure you want to close this pay period ?'),
-                    'params' => [
-                        'id' => $model->id
-                    ],
-                    'method' => 'post',
-                ],
-            ]) : '' ?>
-            <?= (!$model->isNewRecord && !$paymentheader || array_key_exists('paymentlines', $paymentheader)) ? Html::a(Yii::t('app', 'Generate Payment Header'), ['generate-header'], [
-                'class' => 'btn btn-info',
-                'data' => [
-                    'confirm' => Yii::t('app', 'Are you sure you want to generate payment header for this pay period?'),
-                    'params' => [
-                        'payperiod' => $model->id,
-                        'property' => $model->property_id
-                    ],
-                    'method' => 'post',
-                ],
-            ]) : '' ?>
-            <?= (!$model->isNewRecord && ($paymentheader && is_array($paymentheader['paymentlines'])) && $model->payperiodstatus->name == 'Open') ? Html::a(Yii::t('app', 'Invoice Tenants'), ['invoice'], [
-                'class' => 'btn btn-success',
-                'data' => [
-                    'confirm' => Yii::t('app', 'Are you sure you want to Invoice tenants in this property for this pay period ?'),
-                    'params' => [
-                        'id' => $model->id
-                    ],
-                    'method' => 'post',
-                ],
-            ]) : '' ?>
 
-        </div>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-md-4 col">
@@ -58,7 +21,7 @@ $date = 'Rent Period Ending ' . date('M, Y');
 
             <?= $form->field($model, 'period')->textInput(['type' => 'date']) ?>
 
-            <?= $form->field($model, 'body')->textarea(['rows' => 3, 'value' => $date]) ?>
+            <?= $form->field($model, 'body')->textarea(['rows' => 3]) ?>
 
             <?= $form->field($model, 'property_id')->dropDownList($properties, ['prompt' => 'Select ..']) ?>
 
@@ -146,7 +109,7 @@ $date = 'Rent Period Ending ' . date('M, Y');
             </div>
 
         <?php else: ?>
-            <div class="alert alert-info">Payment Lines are yet to be Generated for this Pay Period.</div>
+            <div class="alert alert-info my-4">Payment Lines are yet to be Generated for this Pay Period.</div>
         <?php endif; ?>
     </div>
 </div>
@@ -155,10 +118,11 @@ $date = 'Rent Period Ending ' . date('M, Y');
 
 $script = <<<JS
 
-$(function(){
-        
+$(function(){    
     $('#paymentlines').DataTable();
 });
+
+
 JS;
 
 $this->registerJs($script);

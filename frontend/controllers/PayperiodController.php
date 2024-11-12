@@ -187,7 +187,7 @@ class PayperiodController extends Controller
         $paymentHeader->property_id = Yii::$app->request->post('property');
 
         if ($paymentHeader->save()) {
-            Yii::$app->session->setFlash('success', 'Payment Header for this property and period has been created.');
+            Yii::$app->session->setFlash('success', 'Billing Voucher for this property and period has been created.');
         } else {
             Yii::$app->session->setFlash('error', 'Could not create a payperiod payment header.');
         }

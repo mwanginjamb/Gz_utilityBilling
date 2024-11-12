@@ -4,6 +4,29 @@
  */
 
 
+// Get references to the input elements
+const periodField = document.getElementById('payperiod-period');
+const bodyField = document.getElementById('payperiod-body');
+
+// Add blur event listener on the date field
+periodField.addEventListener('change', function () {
+    // Get the date value from the date field
+    const dateValue = new Date(periodField.value);
+    console.log('date value is: ', dateValue);
+    if (!isNaN(dateValue)) { // Check if date is valid
+        // Extract month and year
+        const month = dateValue.toLocaleString('default', { month: 'long' });
+        const year = dateValue.getFullYear();
+
+        // Populate the text field with the formatted text
+        bodyField.value = 'Invoice for period ending ' + month + ', ' + year + '.'
+    } else {
+        // Clear the body field if date is invalid
+        bodyField.value = '';
+    }
+});
+
+
 //make all selectboxes searchable
 $('select').select2();
 //Initialize Sweet Alert

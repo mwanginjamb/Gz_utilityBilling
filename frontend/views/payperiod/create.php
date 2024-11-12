@@ -9,15 +9,21 @@ $this->title = Yii::t('app', 'Create Payperiod');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Payperiods'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="payperiod-create">
+<div class="payperiod-create card card-info">
+    <div class="card-header">
+        <div class="card-title">
+            <h3><?= Html::encode($this->title) ?></h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <?= $this->render('_form', [
+            'model' => $model,
+            'properties' => $properties,
+            'payperiodstatus' => $payperiodstatus,
+            'paymentheader' => $paymentheader
+        ]) ?>
+    </div>
+</div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-        'properties' => $properties,
-        'payperiodstatus' => $payperiodstatus,
-        'paymentheader' => $paymentheader
-    ]) ?>
 
 </div>

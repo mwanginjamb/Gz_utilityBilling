@@ -16,7 +16,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="card card-info">
 
     <div class="card-header">
-        <h2 class="card-title">Property Payperiods</h2>
+        <div class="card-title">
+            <h3>Property Payperiods</h3>
+        </div>
+        <div class="card-tools">
+            <?= Html::a(Yii::t('app', '+ Payperiod'), ['create'], ['class' => 'btn btn-warning', 'title' => 'Add a new record.']) ?>
+        </div>
     </div>
     <div class="card-body">
         <table class="table table-bordered">
