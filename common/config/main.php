@@ -49,7 +49,7 @@ return [
                 ],
                 [
                     'class' => \yii\log\FileTarget::class,
-                    'levels' => ['info'],
+                    'levels' => ['info', 'error'],
                     'categories' => ['dbinfo'], // Custom category for job errors
                     'logFile' => '@runtime/logs/db-ops.log', // Path to the log file
                     'logVars' => [], // Exclude variables like $_SERVER, $_POST, etc., if unnecessary

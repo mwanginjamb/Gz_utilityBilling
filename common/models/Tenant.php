@@ -51,13 +51,18 @@ class Tenant extends \yii\db\ActiveRecord
         return [
             [['principle_tenant_name', 'billing_email_address', 'house_number', 'cell_number', 'agreed_rent_payable', 'agreed_water_rate'], 'required'],
             [['user_id', 'agreed_rent_payable', 'agreed_water_rate', 'has_signed_tenancy_agreement', 'created_at', 'updated_at'], 'integer'],
-            [['principle_tenant_name', 'house_number'], 'string', 'max' => 255],
+            [['principle_tenant_name'], 'string', 'max' => 255],
             [['cell_number'], 'string', 'max' => 25],
             [['billing_email_address', 'id_number'], 'string', 'max' => 50],
             ['billing_email_address', 'email'],
-            ['house_number', 'unique'],
             ['property', 'string'],
             ['service_charge', 'double'],
+            [
+                ['principle_tenant_name', 'billing_email_address', 'house_number'],
+                'unique',
+                'targetAttribute' => ['principle_tenant_name', 'billing_email_address', 'house_number'],
+                'message' => 'The tenant details are already onboarded for that property.'
+            ],
         ];
     }
 

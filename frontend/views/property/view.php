@@ -139,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 </td>
                                                 <td><?= $unit->tenant['cell_number'] ?></td>
                                                 <td><?= $unit->tenant['billing_email_address'] ?></td>
-                                                <td><?= Html::a(Yii::t('app', '<i class="fas fa-edit"></i>Update'), ['tenant/update', 'id' => $unit->id, 'property' => $model->id], ['class' => 'btn btn-outline-info']) ?>
+                                                <td><?= Html::a(Yii::t('app', '<i class="fas fa-edit"></i>Update'), ['tenant/update', 'id' => $unit->tenant['id'], 'property' => $model->id], ['class' => 'btn btn-outline-info']) ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach;

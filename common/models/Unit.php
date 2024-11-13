@@ -40,6 +40,7 @@ class Unit extends \yii\db\ActiveRecord
         return [
             [['tenant_id', 'property_id', 'created_at', 'update_at', 'created_by', 'updated_by', 'deleted', 'deleted_at', 'deleted_by'], 'integer'],
             [['unit_name'], 'string', 'max' => 50],
+            ['unit_name', 'unique'],
             [['property_id'], 'exist', 'skipOnError' => true, 'targetClass' => Property::class, 'targetAttribute' => ['property_id' => 'id']],
             //[['tenant_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tenant::class, 'targetAttribute' => ['tenant_id' => 'id']],
         ];

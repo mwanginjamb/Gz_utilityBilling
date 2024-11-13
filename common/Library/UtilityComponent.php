@@ -13,6 +13,7 @@ namespace common\Library;
 
 use yii;
 use yii\base\Component;
+use yii\helpers\FileHelper;
 
 
 class UtilityComponent extends Component
@@ -82,6 +83,14 @@ class UtilityComponent extends Component
         $decommad = str_replace(',', '', $sanitized);
         $sanitized_path = str_replace("'", '', $decommad);
         return strtolower(mb_substr($sanitized_path, 0, 10));
+    }
+
+    public function createDir($targetPath)
+    {
+        if (!is_dir(dirname($targetPath))) {
+            FileHelper::createDirectory(dirname($targetPath));
+            chmod(dirname($targetPath), 0755);
+        }
     }
 
 }
