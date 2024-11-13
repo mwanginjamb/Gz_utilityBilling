@@ -68,6 +68,8 @@ class PropertyController extends Controller
             ->andWhere(['property_id' => $id])
             ->andWhere(['tenant.id' => NULL])->asArray()->all();
 
+        //Yii::$app->utility->printrr($vacantUnits);
+
         $totalTenants = count($occupiedUnits);
         $totalVacant = count($vacantUnits);
 
@@ -83,7 +85,8 @@ class PropertyController extends Controller
             'occupiedUnits' => $occupiedUnits,
             'totalTenants' => $totalTenants,
             'totalVacant' => $totalVacant,
-            'totalRevenue' => $totalRevenue
+            'totalRevenue' => $totalRevenue,
+            'vacantUnits' => $vacantUnits
         ]);
     }
 

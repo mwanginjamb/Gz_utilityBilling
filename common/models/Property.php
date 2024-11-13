@@ -16,6 +16,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $updated_at
  * @property int|null $created_by
  * @property int|null $updated_by
+ * @property string|null $billing_type
  *
  * @property Paymentheader[] $paymentheaders
  * @property Payperiod[] $payperiods
@@ -45,6 +46,7 @@ class Property extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            ['billing_type', 'required'],
             [['build_date'], 'safe'],
             [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name'], 'string', 'max' => 100],

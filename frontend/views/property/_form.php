@@ -24,6 +24,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form->field($model, 'updated_by')->textInput() ?>
 
+    <?= $form->field($model, 'billing_type')->dropDownList([
+        'composite' => 'composite (rent, utilities, service charge)',
+        'service_charge' => 'Service Charge Only',
+        'rent' => 'rent Only',
+        'utilities' => 'Utilities Only'
+    ]) ?>
+
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>

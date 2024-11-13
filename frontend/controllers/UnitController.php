@@ -2,11 +2,12 @@
 
 namespace frontend\controllers;
 
+use yii\helpers\Url;
 use common\models\Unit;
-use common\models\UnitSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\UnitSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * UnitController implements the CRUD actions for Unit model.
@@ -65,17 +66,26 @@ class UnitController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($property = null)
     {
         $model = new Unit();
+        $property_initiated = false;
+        if ($property) {
+            $model->property_id = $property;
+            $property_initiated = true;
+        }
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                if ($property_initiated) {
+                    return $this->redirect(Url::toRoute(['property/view', 'id' => $property], $schema = true));
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
         }
+
 
         return $this->render('create', [
             'model' => $model,

@@ -21,7 +21,8 @@
         "yiithings/yii2-dotenv": "^1.1",
         "yiisoft/yii2-queue": "^2.3",
         "yiisoft/yii2-httpclient": "*",
-        "kartik-v/yii2-mpdf": "dev-master"
+        "kartik-v/yii2-mpdf": "dev-master",
+        "phpoffice/phpspreadsheet": "^3.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

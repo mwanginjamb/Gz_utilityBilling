@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'method' => 'post',
                         ],
                     ]) : '' ?>
-                    <?= (!$paymentheader || !is_array($paymentheader['paymentlines'])) ? Html::a(Yii::t('app', 'Generate Payment Header'), ['generate-header'], [
+                    <?= (!$paymentheader || !is_array($paymentheader['paymentlines'])) ? Html::a(Yii::t('app', 'Generate Billing Voucher'), ['generate-header'], [
                         'class' => 'btn btn-info',
                         'data' => [
                             'confirm' => Yii::t('app', 'Are you sure you want to generate payment header for this pay period?'),

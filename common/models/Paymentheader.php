@@ -167,9 +167,9 @@ class Paymentheader extends \yii\db\ActiveRecord
                         'closing_water_readings' => 0.00,
                         'tenant_id' => $tenant->id,
                         'tenant_name' => $tenant->principle_tenant_name,
-                        'agreed_rent_payable' => $tenant->agreed_rent_payable,
-                        'agreed_water_rate' => $tenant->agreed_water_rate,
-                        'service_charge' => $tenant->service_charge
+                        'agreed_rent_payable' => ($property->billing_type == 'composite' || $property->billing_type == 'rent') ? $tenant->agreed_rent_payable : 0.00,
+                        'agreed_water_rate' => ($property->billing_type == 'composite' || $property->billing_type == 'utilities') ? $tenant->agreed_water_rate : 0.00,
+                        'service_charge' => ($property->billing_type == 'composite' || $property->billing_type == 'service_charge') ? $tenant->service_charge : 0.00
                     ];
                 }
 

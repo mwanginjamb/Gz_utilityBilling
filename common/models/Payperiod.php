@@ -18,6 +18,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $update_at
  * @property int|null $created_by
  * @property int|null $updated_by
+ * @property bool|null $separated_billing
  *
  * @property Paymentheader[] $paymentheaders
  * @property Payperiodstatus $payperiodstatus
@@ -63,8 +64,9 @@ class Payperiod extends \yii\db\ActiveRecord
                 ['period', 'property_id'],
                 'unique',
                 'targetAttribute' => ['period', 'property_id'],
-                'message' => 'The combination of period and Property ID has already been taken.'
+                'message' => 'The combination of period and Property ID is already in use.'
             ],
+            ['separated_billing', 'safe']
         ];
     }
 
@@ -123,6 +125,15 @@ class Payperiod extends \yii\db\ActiveRecord
     public static function find()
     {
         return new PayperiodQuery(get_called_class());
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        // check property billing type is not composite
+        if ($this->property->billing_type !== 'composite') {
+            $this->updateAttributes(['separated_billing' => true]);
+        }
     }
 
 

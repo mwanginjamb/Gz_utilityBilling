@@ -65,15 +65,48 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]) ?>
 
+                <!-- Vacant Units -->
+
+                <?php if ($vacantUnits && is_array($vacantUnits) && count($vacantUnits)): ?>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <theader>
+                                <tr class="bg-info">
+                                    <th>Vacant Units</th>
+                                </tr>
+                            </theader>
+                            <tbody>
+                                <?php foreach ($vacantUnits as $unit): ?>
+                                    <tr>
+                                        <td><?= $unit['unit_name'] ?? 'not set' ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                <?php endif; ?>
+
+
             </div>
             <div class="col-md-8">
-                <div class="card card-info">
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
                             <h2>Current Tenants</h2>
                         </div>
                         <div class="card-tools">
+                            <?= Html::a(Yii::t('app', '<i class="fas fa-plus"></i> Add Unit'), ['unit/create', 'property' => $model->id], ['class' => 'btn btn-success']) ?>
                             <?= Html::a(Yii::t('app', '<i class="fas fa-users"></i> Add Tenant'), ['tenant/create', 'property' => $model->id], ['class' => 'btn btn-warning']) ?>
+                            <?= Html::a(Yii::t('app', '<i class="fas fa-plus"></i>Create Pay Periods'), ['payperiod/create'], [
+                                'class' => 'btn btn-primary',
+                                'data' => [
+                                    'params' => [
+                                        'property' => $model->id
+                                    ],
+                                    'method' => 'GET',
+                                ],
+                            ]) ?>
                         </div>
                     </div>
                     <div class="card-body">
