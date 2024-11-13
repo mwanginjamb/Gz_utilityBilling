@@ -49,7 +49,7 @@ class TenantController extends Controller
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => Tenant::find()->all(),
+            'dataProvider' => Tenant::find()->joinWith('unit')->where(['not', ['unit.unit_name' => NULL]])->all(),
         ]);
     }
 
