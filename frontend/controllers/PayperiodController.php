@@ -242,8 +242,6 @@ class PayperiodController extends Controller
 
     public function actionCommit()
     {
-
-
         try {
             $endpoint = Yii::$app->request->post('service');
             $field = Yii::$app->request->post('name');
@@ -255,8 +253,6 @@ class PayperiodController extends Controller
             $client = new Client([
                 'transport' => CurlTransport::class,
             ]);
-
-
 
             $request = $client->createRequest()
                 ->setMethod('PUT')
@@ -283,8 +279,6 @@ class PayperiodController extends Controller
         } catch (\Exception $e) {
             return "HTTP request failed with error: " . $e->getMessage();
         }
-
-
 
     }
 

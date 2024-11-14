@@ -49,7 +49,11 @@ return [
             'rules' => [
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => ['apiv1/invoicelines'],
+                    'controller' => [
+                        'apiv1/invoicelines',
+                        'apiv1/tenants',
+                        'apiv1/schedules',
+                    ],
                     'except' => ['delete']
                 ]
             ],

@@ -2,14 +2,15 @@
 
 namespace frontend\controllers;
 
+use Yii;
 use common\models\Unit;
 use yii\web\Controller;
 use common\models\Property;
+use common\models\Schedule;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use common\models\PropertySearch;
 use yii\web\NotFoundHttpException;
-use Yii;
 
 /**
  * PropertyController implements the CRUD actions for Property model.
@@ -79,6 +80,7 @@ class PropertyController extends Controller
             }, 0);
         }
 
+        $schedule = Schedule::find()->where(['estate_id' => $id])->one();
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -86,7 +88,8 @@ class PropertyController extends Controller
             'totalTenants' => $totalTenants,
             'totalVacant' => $totalVacant,
             'totalRevenue' => $totalRevenue,
-            'vacantUnits' => $vacantUnits
+            'vacantUnits' => $vacantUnits,
+            'schedule' => $schedule
         ]);
     }
 
@@ -161,5 +164,61 @@ class PropertyController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionSchedule()
+    {
+        $property = Yii::$app->request->post('property');
+        $schedule = new Schedule();
+        $schedule->estate_id = $property;
+        if ($schedule->save()) {
+            Yii::$app->session->setFlash('success', 'A scheduling for billing has been created, please adjust the billing date from the scheduling table.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Could not create a scheduled billing schedule, contact the administrator.');
+        }
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionCommit()
+    {
+        try {
+            $endpoint = Yii::$app->request->post('service');
+            $field = Yii::$app->request->post('name');
+            $value = Yii::$app->request->post('value');
+
+            $payload = [
+                $field => $value
+            ];
+            $client = new Client([
+                'transport' => CurlTransport::class,
+            ]);
+
+            $request = $client->createRequest()
+                ->setMethod('PUT')
+                ->setUrl($endpoint)
+                ->addHeaders(['Content-Type' => 'application/json'])
+                ->setFormat(Client::FORMAT_JSON)  // Ensures JSON encoding
+                ->setData($payload)
+                ->setOptions([
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false
+                ]);
+
+            $response = $request->send();
+
+            if ($response->isOk) { // Check if the response status is 200-299
+                return $response->data; // Return the relevant response data
+            } else {
+                // Log error details if needed and return a clear message
+                return [
+                    'status' => $response->statusCode,
+                    'error' => $response->data ?? 'Unexpected error occurred'
+                ];
+            }
+        } catch (\Exception $e) {
+            return "HTTP request failed with error: " . $e->getMessage();
+        }
+
     }
 }
