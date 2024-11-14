@@ -30,7 +30,7 @@ class Schedule extends \yii\db\ActiveRecord
     {
         return [
             [['estate_id', 'created_at', 'updated_at'], 'integer'],
-            [['billing_date'], 'safe'],
+            [['billing_date'], 'date', 'format' => 'php:Y-m-d'],
             ['estate_id', 'unique']
         ];
     }

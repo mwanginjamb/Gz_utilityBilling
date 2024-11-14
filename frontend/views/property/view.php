@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </div>
                                     <div class="card-title">
                                         <?php if($schedule):
-                                            $endpoint = Url::home(true) . 'apiv1/schedule/' . $schedule->id ?>
+                                            $endpoint = Url::home(true) . 'apiv1/schedules/' . $schedule->id ?>
                                             <table class="table table-boardered">
                                                 <theader>
                                                     <tr>
