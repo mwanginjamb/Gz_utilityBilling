@@ -5,11 +5,13 @@ namespace frontend\controllers;
 use Yii;
 use common\models\Unit;
 use yii\web\Controller;
+use yii\httpclient\Client;
 use common\models\Property;
 use common\models\Schedule;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use common\models\PropertySearch;
+use yii\httpclient\CurlTransport;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -33,6 +35,21 @@ class PropertyController extends Controller
                 ],
             ]
         );
+    }
+
+
+    public function beforeAction($action)
+    {
+
+        $ExceptedActions = [
+            'commit',
+        ];
+
+        if (in_array($action->id, $ExceptedActions)) {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     /**
