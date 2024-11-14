@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use common\models\PropertySearch;
 use yii\httpclient\CurlTransport;
+use yii\filters\ContentNegotiator;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -32,6 +33,14 @@ class PropertyController extends Controller
                     'actions' => [
                         'delete' => ['POST'],
                     ],
+                ],
+                'contentNegotiator' => [
+                    'class' => ContentNegotiator::class,
+                    'only' => ['commit'],
+                    'formatParam' => '_format',
+                    'formats' => [
+                        'application/json' => \yii\web\Response::FORMAT_JSON,
+                    ]
                 ],
             ]
         );
@@ -207,6 +216,7 @@ class PropertyController extends Controller
             $payload = [
                 $field => $value
             ];
+
             $client = new Client([
                 'transport' => CurlTransport::class,
             ]);

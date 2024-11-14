@@ -5,7 +5,6 @@ namespace frontend\controllers;
 use common\jobs\SendEmailJob;
 use common\models\Paymentheader;
 use common\models\Payperiodstatus;
-use yii\base\Response;
 use yii\filters\ContentNegotiator;
 use yii\httpclient\Client;
 use yii\httpclient\CurlTransport;
