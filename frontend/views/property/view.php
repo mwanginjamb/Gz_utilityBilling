@@ -98,8 +98,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 <tbody>
                                                     <tr>
                                                         <td
-                                                        data-key="<?= $schedule->id ?>" data-name="opening_water_readings"
-                                    class="opening_water_readings text-info text text-center" data-service="<?= $endpoint ?>"
+                                                        data-key="<?= $schedule->id ?>" data-name="billing_date"
+                                    class="billing_date text-info text text-center" data-service="<?= $endpoint ?>"
                                     ondblclick="addInput(this,'date')"
                                                          ><?= Yii::$app->formatter->asDate($schedule->billing_date)?></td>
                                                     </tr>

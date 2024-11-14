@@ -50,11 +50,12 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => [
+                        'apiv1/schedule',
                         'apiv1/invoicelines',
-                        'apiv1/tenants',
-                        'apiv1/schedules',
+                        'apiv1/tenant',
                     ],
-                    'except' => ['delete']
+                    'except' => ['delete'],
+
                 ]
             ],
         ],
