@@ -218,6 +218,5 @@ class Paymentheader extends \yii\db\ActiveRecord
             ]));
         }
         Yii::info('The tenants of this property' . $this->property->name . ' have begun receiving their bills for ' . $this->payperiod->body, 'dbinfo');
-        return $this->redirect(Yii::$app->request->referrer);
     }
 }
