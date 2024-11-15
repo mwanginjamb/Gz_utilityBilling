@@ -3,9 +3,11 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+use common\jobs\SendEmailJob;
+use yii\web\NotFoundHttpException;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "paymentheader".
@@ -124,6 +126,11 @@ class Paymentheader extends \yii\db\ActiveRecord
         parent::afterSave($insert, $changedAttributes);
         if ($insert) {
             $this->generateInvoiceLines();
+            // provision for autoInvoicing for auto-scheduled properties
+            $schedule = Schedule::findOne(['estate_id' => $this->property_id]);
+            if ($schedule) {
+                $this->autoInvoice();
+            }
         }
     }
 
@@ -201,4 +208,16 @@ class Paymentheader extends \yii\db\ActiveRecord
         return null;
     }
 
+    // Auto Invoice billing voucher lines for auto scheduled properties
+    public function autoInvoice()
+    {
+        $paymentLines = $this->paymentlines;
+        foreach ($paymentLines as $paymentLine) {
+            Yii::$app->queue->push(new SendEmailJob([
+                'paymentLineId' => $paymentLine->id,
+            ]));
+        }
+        Yii::info('The tenants of this property' . $this->property->name . ' have begun receiving their bills for ' . $this->payperiod->body, 'dbinfo');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
 }
