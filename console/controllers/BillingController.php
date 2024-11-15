@@ -28,7 +28,7 @@ class BillingController extends Controller
             foreach ($schedules as $schedule) {
                 // Check if a pay period for this estate and month already exists
                 $payPeriodExists = Payperiod::find()
-                    ->where(['property_id' => $schedule->estate_id, 'payperiod_date' => date('Y-m-d')])
+                    ->where(['property_id' => $schedule->estate_id, 'period' => date('Y-m-d')])
                     ->exists();
 
                 if (!$payPeriodExists) {
