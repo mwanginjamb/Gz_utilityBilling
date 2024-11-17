@@ -7,6 +7,7 @@ use yii\helpers\Html;
 
 //Yii::$app->urlManager->hostInfo = env('APP_BASE_URL', 'http://utility.com');
 $verifyLink = env('APP_BASE_URL', 'http://utility.com') . '/tenant/view-invoice?invoiceid=' . $paymentLine->id;
+$billingType = $paymentLine->paymentheader->property->billing_type;
 ?>
 
 <div class="envelo" style="background-color:#ddd; padding:1rem; width: 100%; max-width: 600px;">
@@ -28,30 +29,42 @@ $verifyLink = env('APP_BASE_URL', 'http://utility.com') . '/tenant/view-invoice?
     </table>
 
     <table style="width: 100%; padding: 20px; font-family: Arial, sans-serif;">
-        <tr>
-            <td class="item"
-                style="background-color: #007bff; color: #ffffff; padding: 12px; text-align: left; width: 50%;">Rent
-            </td>
-            <td class="cost"
-                style="color:#007bff; padding: 11px; text-align: right; border: 1px solid #007bff; width: 50%;">
-                <?= Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable, 'Ksh.') ?>
-            </td>
-        </tr>
-        <tr>
-            <td class="item" style="background-color: #007bff; color: #ffffff; padding: 12px; text-align: left;">Water
-            </td>
-            <td class="cost" style="color: #007bff; padding: 11px; text-align: right; border: 1px solid #007bff;">
-                <?= Yii::$app->formatter->asCurrency($paymentLine->water_bill, 'Ksh.') ?> Units Consumed:
-                <?= $paymentLine->units_used ?>
-            </td>
-        </tr>
-        <tr>
-            <td class="item" style="background-color: #007bff; color: #ffffff; padding: 12px; text-align: left;">Garbage
-            </td>
-            <td class="cost" style="color: #007bff; padding: 11px; text-align: right; border: 1px solid #007bff;">
-                <?= Yii::$app->formatter->asCurrency($paymentLine->service_charge, 'Ksh.') ?>
-            </td>
-        </tr>
+
+        <?php if ($billingType == 'composite' || $billingType == 'rent'): ?>
+            <tr>
+                <td class="item"
+                    style="background-color: #007bff; color: #ffffff; padding: 12px; text-align: left; width: 50%;">Rent
+                </td>
+                <td class="cost"
+                    style="color:#007bff; padding: 11px; text-align: right; border: 1px solid #007bff; width: 50%;">
+                    <?= Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable, 'Ksh.') ?>
+                </td>
+            </tr>
+        <?php endif; ?>
+
+
+        <?php if ($billingType == 'composite' || $billingType == 'utilities'): ?>
+            <tr>
+                <td class="item" style="background-color: #007bff; color: #ffffff; padding: 12px; text-align: left;">Water
+                </td>
+                <td class="cost" style="color: #007bff; padding: 11px; text-align: right; border: 1px solid #007bff;">
+                    <?= Yii::$app->formatter->asCurrency($paymentLine->water_bill, 'Ksh.') ?> Units Consumed:
+                    <?= $paymentLine->units_used ?>
+                </td>
+            </tr>
+
+        <?php endif; ?>
+
+        <?php if ($billingType == 'composite' || $billingType == 'service_charge'): ?>
+            <tr>
+                <td class="item" style="background-color: #007bff; color: #ffffff; padding: 12px; text-align: left;">Service
+                    Charge
+                </td>
+                <td class="cost" style="color: #007bff; padding: 11px; text-align: right; border: 1px solid #007bff;">
+                    <?= Yii::$app->formatter->asCurrency($paymentLine->service_charge, 'Ksh.') ?>
+                </td>
+            </tr>
+        <?php endif ?>
         <tr>
             <td class="item"
                 style="background-color: #0056b3; color: #ffffff; padding: 12px; font-weight: bold; text-align: left;">

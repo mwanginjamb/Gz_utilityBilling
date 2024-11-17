@@ -52,13 +52,21 @@ use yii\widgets\ActiveForm;
                         <tr>
 
                             <td class="info text-bold">Tenant Name</td>
+                             <?php if ($model->property->billing_type == 'rent' || $model->property->billing_type == 'composite'): ?>
                             <td class="info text-bold">Rent</td>
+                            <?php endif; ?>
+                             <?php if ($model->property->billing_type == 'utility' || $model->property->billing_type == 'composite'): ?>
                             <td class="info text-bold">Water Rate/Unit</td>
                             <td class="info text-info text-bold">Opening Water Reading</td>
                             <td class="info text-info text-bold">Closing Water Reading</td>
                             <td class="info text-bold">Units Consumed</td>
                             <td class="info text-bold">Water Bill</td>
-                            <td>Action</td>
+                            <?php endif; ?>
+                             <?php if ($model->property->billing_type == 'service_charge' || $model->property->billing_type == 'composite'): ?>
+                            <td class="info text-bold">Service Charge</td>
+                            <?php endif; ?>
+
+                            <!-- <td>Action</td> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -70,24 +78,34 @@ use yii\widgets\ActiveForm;
                             <tr class="<?= $class ?>">
 
                                 <td><?= $line->tenant_name ?></td>
-                                <td><?= Yii::$app->formatter->asCurrency($line->agreed_rent_payable, 'Ksh.') ?></td>
-                                <td><?= $line->agreed_water_rate ?></td>
-                                <td data-key="<?= $line->id ?>" data-name="opening_water_readings"
-                                    class="opening_water_readings text-info" data-service="<?= $endpoint ?>"
-                                    ondblclick="addInput(this,'number')">
-                                    <?= $line->opening_water_readings ?>
-                                </td>
-                                <td data-key="<?= $line->id ?>" data-name="closing_water_readings" data-reload="1"
-                                    class="closing_water_readings text-info" data-service="<?= $endpoint ?>"
-                                    ondblclick="addInput(this,'number')" data-validate="water_bill">
-                                    <?= $line->closing_water_readings ?>
-                                </td>
-                                <td><?= $line->units_used ?></td>
-                                <td data-name="water_bill" class="water_bill">
-                                    <?= Yii::$app->formatter->asCurrency($line->water_bill, 'Ksh.') ?>
-                                </td>
+                                <?php if ($model->property->billing_type == 'rent' || $model->property->billing_type == 'composite'): ?>
+                                    <td><?= Yii::$app->formatter->asCurrency($line->agreed_rent_payable, 'Ksh.') ?></td>
+                                <?php endif; ?>
 
-                                <td>
+                                <?php if ($model->property->billing_type == 'utility' || $model->property->billing_type == 'composite'): ?>
+                                    <td><?= $line->agreed_water_rate ?></td>
+                                    <td data-key="<?= $line->id ?>" data-name="opening_water_readings"
+                                        class="opening_water_readings text-info" data-service="<?= $endpoint ?>"
+                                        ondblclick="addInput(this,'number')">
+                                        <?= $line->opening_water_readings ?>
+                                    </td>
+                                    <td data-key="<?= $line->id ?>" data-name="closing_water_readings" data-reload="1"
+                                        class="closing_water_readings text-info" data-service="<?= $endpoint ?>"
+                                        ondblclick="addInput(this,'number')" data-validate="water_bill">
+                                        <?= $line->closing_water_readings ?>
+                                    </td>
+                                    <td><?= $line->units_used ?></td>
+                                    <td data-name="water_bill" class="water_bill">
+                                        <?= Yii::$app->formatter->asCurrency($line->water_bill, 'Ksh.') ?>
+                                    </td>
+                                <?php endif; ?>
+                                <?php if ($model->property->billing_type == 'service_charge' || $model->property->billing_type == 'composite'): ?>
+                                    <td data-name="service_charge" class="service_charge">
+                                        <?= Yii::$app->formatter->asCurrency($line->service_charge, 'Ksh.') ?>
+                                    </td>
+                                <?php endif; ?>
+
+                                <!-- <td>
                                     <?= ($line->invoiced === NULL) ? Html::a('<i class="fas fa-eye"></i> Update', Url::toRoute(['paymentlines/update', 'id' => $line->id], $schema = true), [
                                         'class' => 'btn btn-outline-primary btn-xs mx-1',
                                         'title' => 'Update Invoice Line',
@@ -100,7 +118,7 @@ use yii\widgets\ActiveForm;
                                         ]
 
                                     ]) : ''; ?>
-                                </td>
+                                </td> -->
 
                             </tr>
                         <?php endforeach; ?>

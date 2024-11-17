@@ -119,12 +119,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
 
                                     <td class="info text-bold">Tenant Name</td>
-                                    <td class="info text-bold">Rent</td>
-                                    <td class="info text-bold">Water Rate/Unit</td>
-                                    <td class="info text-bold">Opening Water Reading</td>
-                                    <td class="info text-bold">Closing Water Reading</td>
-                                    <td class="info text-bold">Units Consumed</td>
-                                    <td class="info text-bold">Water Bill</td>
+
+                                    <?php if ($model->property->billing_type == 'rent' || $model->property->billing_type == 'composite'): ?>
+                                        <td class="info text-bold">Rent</td>
+                                    <?php endif; ?>
+                                    <?php if ($model->property->billing_type == 'utility' || $model->property->billing_type == 'composite'): ?>
+                                        <td class="info text-bold">Water Rate/Unit</td>
+                                        <td class="info text-bold">Opening Water Reading</td>
+                                        <td class="info text-bold">Closing Water Reading</td>
+                                        <td class="info text-bold">Units Consumed</td>
+                                        <td class="info text-bold">Water Bill</td>
+                                    <?php endif; ?>
+                                    <td class="info text-bold">Service Charge</td>
 
                                 </tr>
                             </thead>
@@ -137,16 +143,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <tr class="<?= $class ?>">
 
                                         <td><?= $line->tenant_name ?></td>
-                                        <td><?= Yii::$app->formatter->asCurrency($line->agreed_rent_payable, 'Ksh.') ?></td>
-                                        <td><?= $line->agreed_water_rate ?></td>
-                                        <td><?= $line->opening_water_readings ?></td>
-                                        <td>
-                                            <?= $line->closing_water_readings ?>
-                                        </td>
-                                        <td><?= $line->units_used ?></td>
-                                        <td data-name="water_bill" class="water_bill">
-                                            <?= Yii::$app->formatter->asCurrency($line->water_bill, 'Ksh.') ?>
-                                        </td>
+                                        <?php if ($model->property->billing_type == 'rent' || $model->property->billing_type == 'composite'): ?>
+                                            <td><?= Yii::$app->formatter->asCurrency($line->agreed_rent_payable, 'Ksh.') ?></td>
+                                        <?php endif; ?>
+                                        <?php if ($model->property->billing_type == 'utility' || $model->property->billing_type == 'composite'): ?>
+                                            <td><?= $line->agreed_water_rate ?></td>
+                                            <td><?= $line->opening_water_readings ?></td>
+                                            <td>
+                                                <?= $line->closing_water_readings ?>
+                                            </td>
+                                            <td><?= $line->units_used ?></td>
+                                            <td data-name="water_bill" class="water_bill">
+                                                <?= Yii::$app->formatter->asCurrency($line->water_bill, 'Ksh.') ?>
+                                            </td>
+                                        <?php endif; ?>
+                                        <?php if ($model->property->billing_type == 'service_charge' || $model->property->billing_type == 'composite'): ?>
+                                            <td data-name="service_charge" class="service_charge">
+                                                <?= Yii::$app->formatter->asCurrency($line->service_charge, 'Ksh.') ?>
+                                            </td>
+                                        <?php endif; ?>
 
 
 
