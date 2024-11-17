@@ -72,12 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <thead">
                                         <tr>
                                             <td class="text text-bold">Pay Period</td>
-
-                                            <td class="text text-bold">Rent</td>
-                                            <td class="text text-bold">Water Bill</td>
-                                            <td class="text text-bold">Service Charge</td>
+                                            <!-- <td class="text text-bold">Rent</td> -->
+                                            <!-- <td class="text text-bold">Water Bill</td> -->
+                                            <!-- <td class="text text-bold">Service Charge</td> -->
                                             <td class="text text-bold">Total</td>
-                                            <td>Action</td>
+                                            <td class="text text-bold">View Invoice</td>
+                                            <td class="text text-bold">Download Invoice</td>
                                         </tr>
 
                                         </thead>
@@ -88,14 +88,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     <tr>
                                                         <td><?= $line->paymentheader->payperiod->body . ' - ' . $line->paymentheader->payperiod->payperiodstatus->name ?>
                                                         </td>
-
-                                                        <td><?= $line->agreed_rent_payable ?></td>
+                                                        <!-- <td><?= $line->agreed_rent_payable ?></td>
                                                         <td><?= $line->water_bill ?></td>
-                                                        <td><?= $line->service_charge ?></td>
+                                                        <td><?= $line->service_charge ?></td> -->
                                                         <td><?= Yii::$app->formatter->asCurrency(($line->agreed_rent_payable + $line->water_bill + $line->service_charge), 'Ksh.') ?>
                                                         </td>
                                                         <td>
-                                                            <?= Html::a('Report', ['report', 'invoiceid' => $line->id], ['class' => 'btn btn-sm btn-warning', 'title' => 'View a Detailed Invoice']) ?>
+                                                            <?= Html::a('view Invoice', ['view-invoice', 'invoiceid' => $line->id], ['class' => 'btn btn-sm btn-warning', 'title' => 'View a Detailed Invoice', 'target' => '_blank']) ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= Html::a('Download Invoice', ['report', 'invoiceid' => $line->id], ['class' => 'btn btn-sm btn-warning', 'title' => 'View a Detailed Invoice', 'target' => '_blank']) ?>
                                                         </td>
                                                     </tr>
 

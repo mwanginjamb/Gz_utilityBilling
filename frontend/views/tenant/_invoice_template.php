@@ -8,6 +8,9 @@
 </head>
 
 <body>
+    <?php
+    $billingType = $line->tenant->unit->property->billing_type;
+    ?>
     <section class="main">
 
         <h1>Rental Invoice</h1>
@@ -30,30 +33,29 @@
 
 
         <br>
+        <?php if ($billingType == 'composite' || $billingType == 'utilities'): ?>
+            <h3>Water Utilization</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <td><b>Opening Readings</b></td>
+                        <td><b>Closing Readings</b></td>
+                        <td><b>Unit Consumed</b></td>
+                        <td><b>Cost Per Unit</b></td>
 
-        <h3>Water Utilization</h3>
-
-        <table>
-            <thead>
-                <tr>
-                    <td><b>Opening Readings</b></td>
-                    <td><b>Closing Readings</b></td>
-                    <td><b>Unit Consumed</b></td>
-                    <td><b>Cost Per Unit</b></td>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><?= $line->opening_water_readings ?></td>
-                    <td><?= $line->closing_water_readings ?></td>
-                    <td><?= $line->units_used ?></td>
-                    <td><?= Yii::$app->formatter->asCurrency($line->agreed_water_rate, 'Ksh') ?></td>
-                </tr>
-            </tbody>
-        </table>
-        <br>
-
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?= $line->opening_water_readings ?></td>
+                        <td><?= $line->closing_water_readings ?></td>
+                        <td><?= $line->units_used ?></td>
+                        <td><?= Yii::$app->formatter->asCurrency($line->agreed_water_rate, 'Ksh') ?></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+        <?php endif; ?>
         <h2>Payment Details</h2>
 
         <table>
@@ -64,18 +66,24 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Rent</td>
-                    <td><?= Yii::$app->formatter->asCurrency($line->agreed_rent_payable, 'Ksh.') ?></td>
-                </tr>
-                <tr>
-                    <td>Water Utility Bill</td>
-                    <td><?= Yii::$app->formatter->asCurrency($line->water_bill, 'Ksh') ?></td>
-                </tr>
-                <tr>
-                    <td>Garbage Collection</td>
-                    <td><?= Yii::$app->formatter->asCurrency($line->service_charge, 'Ksh') ?></td>
-                </tr>
+                <?php if ($billingType == 'composite' || $billingType == 'rent'): ?>
+                    <tr>
+                        <td>Rent</td>
+                        <td><?= Yii::$app->formatter->asCurrency($line->agreed_rent_payable, 'Ksh.') ?></td>
+                    </tr>
+                <?php endif; ?>
+                <?php if ($billingType == 'composite' || $billingType == 'utilities'): ?>
+                    <tr>
+                        <td>Water Utility Bill</td>
+                        <td><?= Yii::$app->formatter->asCurrency($line->water_bill, 'Ksh') ?></td>
+                    </tr>
+                <?php endif; ?>
+                <?php if ($billingType == 'composite' || $billingType == 'service_charge'): ?>
+                    <tr>
+                        <td>Service Charge</td>
+                        <td><?= Yii::$app->formatter->asCurrency($line->service_charge, 'Ksh') ?></td>
+                    </tr>
+                <?php endif; ?>
                 <tr></tr>
                 <tr>
                     <td><b>Total</b></td>

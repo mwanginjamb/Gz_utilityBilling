@@ -27,10 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td class="text text-bold text-info">Principal Tenant</td>
                         <td class="text text-bold text-info">Unit</td>
                         <td class="text text-bold text-info">Property</td>
-                        <td class="text text-bold text-info">billing address</td>
+                        <!-- <td class="text text-bold text-info">billing address</td>
                         <td class="text text-bold text-info">Agreed Rent Payable</td>
                         <td class="text text-bold text-info">Water Utility Bill / Unit</td>
-                        <td class="text text-bold text-info">Signed Tenancy Agreement?</td>
+                        <td class="text text-bold text-info">Signed Tenancy Agreement?</td> -->
                         <td class="text text-bold text-info">Actions</td>
 
                     </tr>
@@ -41,10 +41,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $model->principle_tenant_name ?></td>
                             <td><?= $model->unit->unit_name ?></td>
                             <td><?= $model->unit->property->name ?></td>
-                            <td><?= $model->billing_email_address ?></td>
-                            <td><?= Yii::$app->formatter->asCurrency($model->agreed_rent_payable, 'Ksh') ?></td>
+                            <!-- <td><?= $model->billing_email_address ?></td> -->
+                            <!-- <td><?= Yii::$app->formatter->asCurrency($model->agreed_rent_payable, 'Ksh') ?></td>
                             <td><?= Yii::$app->formatter->asCurrency($model->agreed_water_rate, 'Ksh') ?></td>
-                            <td><?= Yii::$app->formatter->asBoolean($model->has_signed_tenancy_agreement) ?></td>
+                            <td><?= Yii::$app->formatter->asBoolean($model->has_signed_tenancy_agreement) ?></td> -->
                             <td>
                                 <?= $Viewlink = Html::a('<i class="fas fa-eye"></i> View', ['view', 'id' => $model->id], [
                                     'class' => 'btn btn-outline-primary btn-xs mx-1',

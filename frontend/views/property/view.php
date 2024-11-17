@@ -52,12 +52,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ]) ?>
         <div class="div row">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <?= DetailView::widget([
                     'model' => $model,
                     'attributes' => [
                         //'id',
                         'name',
+                        'billing_type',
                         'build_date',
                         'created_at:datetime',
                         // 'updated_at',
@@ -116,12 +117,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?php if ($vacantUnits && is_array($vacantUnits) && count($vacantUnits)): ?>
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <theader>
+                        <table class="table table-bordered" id="vacant">
+                            <thead>
                                 <tr class="bg-info">
                                     <th>Vacant Units</th>
                                 </tr>
-                            </theader>
+                            </thead>
                             <tbody>
                                 <?php foreach ($vacantUnits as $unit): ?>
                                     <tr>
@@ -136,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             </div>
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <?= $this->render('_tenants', [
                     'model' => $model,
                     'occupiedUnits' => $occupiedUnits
@@ -153,7 +154,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 $script = <<<JS
 $(function(){  
-    $('#tenants').DataTable();
+    $('#tenants,#vacant').DataTable();
+    
 });
 JS;
 
