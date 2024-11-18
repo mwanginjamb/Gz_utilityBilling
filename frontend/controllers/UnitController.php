@@ -251,10 +251,10 @@ class UnitController extends Controller
 
         return $this->redirect(Url::toRoute(['property/view', 'id' => $model->property_id]));
     }
-    public function actionDownload()
+    public function actionDownload($templateName)
     {
         // Define the path to the template file
-        $templateFilePath = Yii::getAlias('@webroot/templates/template.xlsx');
+        $templateFilePath = Yii::getAlias('@webroot/templates/' . $templateName);
 
         // Check if the file exists before proceeding
         if (file_exists($templateFilePath)) {
@@ -266,7 +266,7 @@ class UnitController extends Controller
             // Handle the case where the template file doesn't exist
             Yii::$app->session->setFlash('error', 'Template file not found.');
             // Redirect or display an error message
-            Yii::$app->getResponse()->redirect(['program/index']);
+            Yii::$app->getResponse()->redirect(Yii::$app->request->referrer);
         }
     }
 }
