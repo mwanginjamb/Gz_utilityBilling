@@ -80,7 +80,7 @@ class AdminlteAsset extends AssetBundle
         'https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js ',
         // 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js',
         'js/custom.js',
-        //'Js/app.js',
+        'js/app.js',
         'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js',
         'https://cdn.jsdelivr.net/npm/sweetalert2@9', //Sweet Alert
         //'https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.js',
