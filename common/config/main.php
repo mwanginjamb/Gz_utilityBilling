@@ -65,6 +65,15 @@ return [
             'orientation' => Pdf::ORIENT_PORTRAIT,
             'destination' => Pdf::DEST_STRING
         ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'sourcePath' => null,
+                    'js' => ['/plugins/jquery/jquery.js'],
+                ]
+            ],
+            'appendTimestamp' => true,
+        ],
     ],
 
 ];
