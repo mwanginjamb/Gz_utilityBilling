@@ -2,20 +2,21 @@
 
 namespace frontend\controllers;
 
-use common\jobs\SendEmailJob;
-use common\models\Paymentheader;
-use common\models\Payperiodstatus;
-use yii\filters\ContentNegotiator;
-use yii\httpclient\Client;
-use yii\httpclient\CurlTransport;
+use Yii;
 use yii\web\Controller;
+use yii\httpclient\Client;
 use common\models\Property;
 use yii\filters\VerbFilter;
 use common\models\Payperiod;
 use yii\helpers\ArrayHelper;
+use common\jobs\SendEmailJob;
+use yii\filters\AccessControl;
+use common\models\Paymentheader;
+use yii\httpclient\CurlTransport;
 use common\models\PayperiodSearch;
+use common\models\Payperiodstatus;
+use yii\filters\ContentNegotiator;
 use yii\web\NotFoundHttpException;
-use Yii;
 
 /**
  * PayperiodController implements the CRUD actions for Payperiod model.
@@ -30,6 +31,17 @@ class PayperiodController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'index', 'update', 'view'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

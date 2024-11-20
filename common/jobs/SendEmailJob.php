@@ -22,9 +22,10 @@ class SendEmailJob extends BaseObject implements JobInterface
             // Yii::info('PaymentLine to invoice: ' . VarDumper::dumpAsString($paymentLine), 'jobInfo');
             // Yii::info('Tenant  to invoice: ' . VarDumper::dumpAsString($paymentLine->tenant), 'jobInfo');
             if ($paymentLine) {
-                $this->sendPaymentLineNotification($paymentLine);
-                $paymentLine->invoiced = true;
-                $paymentLine->save(false);
+                if ($this->sendPaymentLineNotification($paymentLine)) {
+                    $paymentLine->invoiced = true;
+                    $paymentLine->save(false);
+                }
             }
 
         } catch (\Exception $e) {
@@ -39,7 +40,6 @@ class SendEmailJob extends BaseObject implements JobInterface
         Yii::info('Invoicing line: ' . $paymentLine->id, 'jobInfo');
         // Construct the email content based on payment line data
         $subject = "Payment Notification for Invoice #" . 'KAV-INV-' . $paymentLine->id;
-        Yii::info('Successfull billing for invoice : ' . $paymentLine->id, 'jobInfo');
         try {
             // Use Yii's mailer component to send the email
             $mail = Yii::$app

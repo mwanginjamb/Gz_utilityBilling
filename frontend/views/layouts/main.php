@@ -145,13 +145,18 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
                         <div class="dropdown-divider"></div>
-                        <?= (!Yii::$app->user->isGuest) ? Html::a('<i class="fas fa-user mx-1"></i> Profile', '/employee', ['class' => 'dropdown-item']) : ''; ?>
+                        <!-- <?= (!Yii::$app->user->isGuest) ? Html::a('<i class="fas fa-user mx-1"></i> Profile', '/employee', ['class' => 'dropdown-item']) : ''; ?> -->
                         <div class="dropdown-divider"></div>
-                        <?= (!Yii::$app->user->isGuest) ? Html::a('<i class="fas fa-users mx-1"></i> UTAP Team', '/site/credits', ['class' => 'dropdown-item', 'title' => 'Credits: UTAP/ Employee Self Service Portal Development Team', 'target' => '_blank']) : ''; ?>
+                        <!-- <?= (!Yii::$app->user->isGuest) ? Html::a('<i class="fas fa-users mx-1"></i> UTAP Team', '/site/credits', ['class' => 'dropdown-item', 'title' => 'Credits: UTAP/ Employee Self Service Portal Development Team', 'target' => '_blank']) : ''; ?> -->
                         <div class="dropdown-divider"></div>
-                        <?= (!Yii::$app->user->isGuest) ? Html::a('<i class="fas fa-users mx-1"></i> Help Desk', '/issue/create', ['class' => 'dropdown-item', 'title' => 'ESS Help Desk: Escalate any ESS issue via this facility', 'target' => '_blank']) : ''; ?>
+                        <!-- <?= (!Yii::$app->user->isGuest) ? Html::a('<i class="fas fa-users mx-1"></i> Help Desk', '/issue/create', ['class' => 'dropdown-item', 'title' => 'ESS Help Desk: Escalate any ESS issue via this facility', 'target' => '_blank']) : ''; ?> -->
                         <div class="dropdown-divider"></div>
-                        <?= (!Yii::$app->user->isGuest) ? Html::a('<i class="fas fa-sign-out-alt mx-1"></i> Logout (' . \Yii::$app->user->id . ')', '/site/logout/', ['class' => 'dropdown-item']) : ''; ?>
+                        <?= (!Yii::$app->user->isGuest) ? Html::a('<i class="fas fa-sign-out-alt mx-1"></i> Logout (' . ucwords(\Yii::$app->user->identity->username) . ')', '/site/logout/', [
+                            'class' => 'dropdown-item',
+                            'data' => [
+                                'method' => 'POST'
+                            ]
+                        ]) : ''; ?>
                         <div class="dropdown-divider"></div>
                         <?= (Yii::$app->user->isGuest) ? Html::a('<i class="fas fa-lock-open mx-1"></i> Login', '/site/login/', ['class' => 'dropdown-item']) : ''; ?>
 
@@ -232,8 +237,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <?php endif; ?>
                         <!--end Aprroval Management-->
 
-                        <!-- Leave -->
-                        <li
+                        <!-- Tenants -->
+                        <!--<li
                             class="nav-item has-treeview  <?= Yii::$app->utility->currentCtrl(['tenant']) ? 'menu-open' : '' ?>">
                             <a href="#"
                                 class="nav-link <?= Yii::$app->utility->currentCtrl('tenant') ? 'active' : '' ?>">
@@ -253,7 +258,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 </li>
 
                             </ul>
-                        </li>
+                        </li>-->
 
 
                         <!-- Fleet mgt -->

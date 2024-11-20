@@ -93,4 +93,9 @@ class UtilityComponent extends Component
         }
     }
 
+    public function webroot()
+    {
+        return \Yii::getAlias(@$webroot);
+    }
+
 }

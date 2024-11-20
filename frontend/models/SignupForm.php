@@ -14,6 +14,11 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $confirmpassword;
+
+    public $usertype;
+
+
 
 
     /**
@@ -27,6 +32,9 @@ class SignupForm extends Model
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
+            ['usertype', 'required'],
+            ['usertype', 'in', 'range' => ['admin', 'tenant']],
+
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
@@ -35,6 +43,8 @@ class SignupForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+            ['confirmpassword', 'compare', 'compareAttribute' => 'password', 'message' => 'Passwords do not match, try again'],
+
         ];
     }
 
@@ -48,10 +58,11 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
+        $user->usertype = $this->usertype;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
@@ -72,7 +83,7 @@ class SignupForm extends Model
                 ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ''])
             ->setTo($this->email)
             ->setSubject('Account registration at ' . Yii::$app->name)
             ->send();

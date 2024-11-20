@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="paymentheader-actions">
-                    <?= ($model->payperiodstatus->name == 'Open') ? Html::a(Yii::t('app', 'Close Pay period'), ['close'], [
+                    <?= ($model->payperiodstatus->name == 'Open' && ($paymentheader && is_array($paymentheader['paymentlines']))) ? Html::a(Yii::t('app', 'Close Pay period'), ['close'], [
                         'class' => 'btn btn-warning',
                         'data' => [
                             'confirm' => Yii::t('app', 'Are you sure you want to close this pay period ?'),

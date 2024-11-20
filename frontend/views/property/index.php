@@ -25,34 +25,49 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="card-body">
 
-        <?php Pjax::begin(); ?>
-        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+        <div class="table-responsive">
+            <table class="table table-bordered" id="properties">
+                <thead>
+                    <tr>
+                        <td class="tx-bold">Property</td>
+                        <td class="tx-bold">Build Date</td>
+                        <td class="tx-bold">Created At</td>
+                        <td class="tx-bold">Updated At</td>
+                        <td class="tx-bold">Update Action</td>
+                        <td class="tx-bold">View Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($dataProvider as $model): ?>
+                        <tr>
+                            <td><?= $model->name ?></td>
+                            <td><?= Yii::$app->formatter->asDate($model->build_date) ?></td>
+                            <td><?= Yii::$app->formatter->asDateTime($model->created_at) ?></td>
+                            <td><?= Yii::$app->formatter->asDateTime($model->updated_at) ?></td>
+                            <td><?= Html::a('<i class="fa fa-edit"></i>update', ['update', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
+                            </td>
+                            <td>
+                                <?= Html::a('<i class="fa fa-eye"></i>view', ['view', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary']) ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
 
-                //'id',
-                'name',
-                'build_date',
-                'created_at',
-                'updated_at',
-                //'created_by',
-                //'updated_by',
-                [
-                    'class' => ActionColumn::className(),
-                    'urlCreator' => function ($action, Property $model, $key, $index, $column) {
-                                return Url::toRoute([$action, 'id' => $model->id]);
-                            }
-                ],
-            ],
-        ]); ?>
 
-        <?php Pjax::end(); ?>
     </div>
 
 
 
 </div>
+<?php
+$script = <<<JS
+
+$(function(){
+            var table_budget = $('#properties').DataTable();
+});
+JS;
+
+$this->registerJs($script);

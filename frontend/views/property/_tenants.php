@@ -11,9 +11,10 @@ use yii\bootstrap5\Html;
         </div>
         <div class="card-tools">
             <?= Html::a(Yii::t('app', '<i class="fas fa-plus"></i> Add Unit'), ['unit/create', 'property' => $model->id], ['class' => 'btn btn-success']) ?>
-            <?= Html::a(Yii::t('app', '<i class="fas fa-users"></i> Add Tenant'), ['tenant/create', 'property' => $model->id], ['class' => 'btn btn-warning']) ?>
-            <?= Html::a(Yii::t('app', '<i class="fas fa-plus"></i>Create Pay Periods'), ['payperiod/create'], [
+            <?= Html::a(Yii::t('app', '<i class="fas fa-plus"></i> Add Billing Period'), ['payperiod/create'], [
                 'class' => 'btn btn-primary',
+                'target' => '_blank',
+                'title' => 'Add Pay/ Billing Period Period',
                 'data' => [
                     'params' => [
                         'property' => $model->id

@@ -2,7 +2,7 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap5\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var common\models\Payperiod $model */
@@ -16,8 +16,8 @@ use yii\widgets\ActiveForm;
 <div class="row">
     <div class="col-md-4 col">
         <div class="payperiod-form">
-
             <?php $form = ActiveForm::begin(); ?>
+            <?= $form->errorSummary($model) ?>
 
             <?= $form->field($model, 'period')->textInput(['type' => 'date']) ?>
 
@@ -52,18 +52,18 @@ use yii\widgets\ActiveForm;
                         <tr>
 
                             <td class="info text-bold">Tenant Name</td>
-                             <?php if ($model->property->billing_type == 'rent' || $model->property->billing_type == 'composite'): ?>
-                            <td class="info text-bold">Rent</td>
+                            <?php if ($model->property->billing_type == 'rent' || $model->property->billing_type == 'composite'): ?>
+                                <td class="info text-bold">Rent</td>
                             <?php endif; ?>
-                             <?php if ($model->property->billing_type == 'utility' || $model->property->billing_type == 'composite'): ?>
-                            <td class="info text-bold">Water Rate/Unit</td>
-                            <td class="info text-info text-bold">Opening Water Reading</td>
-                            <td class="info text-info text-bold">Closing Water Reading</td>
-                            <td class="info text-bold">Units Consumed</td>
-                            <td class="info text-bold">Water Bill</td>
+                            <?php if ($model->property->billing_type == 'utility' || $model->property->billing_type == 'composite'): ?>
+                                <td class="info text-bold">Water Rate/Unit</td>
+                                <td class="info text-info text-bold">Opening Water Reading</td>
+                                <td class="info text-info text-bold">Closing Water Reading</td>
+                                <td class="info text-bold">Units Consumed</td>
+                                <td class="info text-bold">Water Bill</td>
                             <?php endif; ?>
-                             <?php if ($model->property->billing_type == 'service_charge' || $model->property->billing_type == 'composite'): ?>
-                            <td class="info text-bold">Service Charge</td>
+                            <?php if ($model->property->billing_type == 'service_charge' || $model->property->billing_type == 'composite'): ?>
+                                <td class="info text-bold">Service Charge</td>
                             <?php endif; ?>
 
                             <!-- <td>Action</td> -->

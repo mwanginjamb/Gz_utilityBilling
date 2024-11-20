@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="card-title"><?= $this->title ?></div>
         </div>
         <div class="card-body">
-            <table class="table" id="table">
+            <table class="table table-bordered" id="table">
                 <thead>
                     <tr>
                         <td class="text text-bold text-info">Principal Tenant</td>

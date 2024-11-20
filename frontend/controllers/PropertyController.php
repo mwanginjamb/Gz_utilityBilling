@@ -10,6 +10,7 @@ use common\models\Property;
 use common\models\Schedule;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
 use common\models\PropertySearch;
 use yii\httpclient\CurlTransport;
 use yii\filters\ContentNegotiator;
@@ -28,6 +29,17 @@ class PropertyController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'index', 'update', 'view'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -70,10 +82,13 @@ class PropertyController extends Controller
     {
         $searchModel = new PropertySearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $user = Yii::$app->user->id;
+        $properties = Property::find()->where(['or', ['created_by' => $user], ['updated_by' => $user]])->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'dataProvider' => $properties,
+
         ]);
     }
 
