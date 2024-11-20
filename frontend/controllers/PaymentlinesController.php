@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use yii\web\Controller;
 use yii\helpers\VarDumper;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use common\models\Paymentlines;
 use yii\web\NotFoundHttpException;
 use common\models\PaymentlinesSearch;
@@ -22,6 +23,17 @@ class PaymentlinesController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'index', 'update', 'view', 'create'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

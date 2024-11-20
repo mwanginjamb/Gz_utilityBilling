@@ -2,11 +2,12 @@
 
 namespace frontend\Controllers;
 
-use common\models\Schedule;
-use common\models\ScheduleSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use common\models\Schedule;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use common\models\ScheduleSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * ScheduleController implements the CRUD actions for Schedule model.
@@ -21,6 +22,17 @@ class ScheduleController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'index', 'update', 'view', 'create'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

@@ -2,11 +2,12 @@
 
 namespace frontend\controllers;
 
-use common\models\Paymentheader;
-use common\models\PaymentheaderSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use common\models\Paymentheader;
+use yii\web\NotFoundHttpException;
+use common\models\PaymentheaderSearch;
 
 /**
  * PaymentheaderController implements the CRUD actions for Paymentheader model.
@@ -21,6 +22,17 @@ class PaymentheaderController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'index', 'update', 'view', 'create'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

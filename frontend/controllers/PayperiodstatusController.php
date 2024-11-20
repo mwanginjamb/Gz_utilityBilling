@@ -2,11 +2,12 @@
 
 namespace frontend\controllers;
 
-use common\models\Payperiodstatus;
-use common\models\PayperiodstatusSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use common\models\Payperiodstatus;
+use yii\web\NotFoundHttpException;
+use common\models\PayperiodstatusSearch;
 
 /**
  * PayperiodstatusController implements the CRUD actions for Payperiodstatus model.
@@ -21,6 +22,17 @@ class PayperiodstatusController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'index', 'update', 'view', 'create'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

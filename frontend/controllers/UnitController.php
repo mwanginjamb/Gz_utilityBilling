@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use common\models\UnitSearch;
 use common\models\ExcelImport;
+use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -29,6 +30,17 @@ class UnitController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'index', 'update', 'view', 'create'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

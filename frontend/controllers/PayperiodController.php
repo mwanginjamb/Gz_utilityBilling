@@ -33,7 +33,7 @@ class PayperiodController extends Controller
             [
                 'access' => [
                     'class' => AccessControl::className(),
-                    'only' => ['logout', 'index', 'update', 'view'],
+                    'only' => ['logout', 'index', 'update', 'view', 'create'],
                     'rules' => [
                         [
                             'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
