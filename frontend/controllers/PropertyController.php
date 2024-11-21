@@ -218,7 +218,7 @@ class PropertyController extends Controller
             Yii::$app->session->setFlash('error', 'Could not create a scheduled billing schedule, contact the administrator.');
         }
 
-        return $this->redirect(Yii::$app->request->referrer);
+        return $this->redirect(['view', 'id' => $property]);
     }
 
     public function actionCommit()
