@@ -19,7 +19,7 @@
         <table>
             <tr>
                 <td><b>Unit<b></td>
-                <td><?= $line->tenant->house_number ?></td>
+                <td><?= $line->tenant->unit->unit_name ?></td>
             </tr>
             <tr>
                 <td><b>Pay Period<b></td>

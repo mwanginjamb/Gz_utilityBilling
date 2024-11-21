@@ -34,7 +34,7 @@ class BillingController extends Controller
                 if (!$payPeriodExists) {
                     $payperiod = new Payperiod();
                     $payperiod->property_id = $schedule->estate_id;
-                    $payperiod->body = 'Invoice for period ending -' . date('F Y');
+                    $payperiod->body = 'SC. Invoice for period ending - ' . date('F Y');
                     $payperiod->period = date('Y-m-d');
                     if ($payperiod->save()) {
                         // Generate a paymentheader
