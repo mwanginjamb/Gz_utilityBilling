@@ -248,7 +248,7 @@ class PayperiodController extends Controller
 
         Yii::$app->session->setFlash('success', 'The tenants of this property have begun receiving their rentail bills.');
 
-        return $this->redirect(Yii::$app->request->referrer);
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     public function actionCommit()
