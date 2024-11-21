@@ -186,12 +186,13 @@ class PayperiodController extends Controller
 
     public function actionClose()
     {
-        $model = $this->findModel(\Yii::$app->request->post('id'));
+        $id = \Yii::$app->request->post('id');
+        $model = $this->findModel($id);
         if ($model) {
             $model->payperiodstatus_id = 2;
             $model->save();
         }
-        return $this->redirect(\Yii::$app->request->referrer);
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     public function actionGenerateHeader()
