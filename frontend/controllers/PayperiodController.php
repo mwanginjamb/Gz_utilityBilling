@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\jobs\SendSmsJob;
 use Yii;
 use yii\web\Controller;
 use yii\httpclient\Client;
@@ -158,7 +159,7 @@ class PayperiodController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            \Yii::$app->session->setFlash('success', 'Record Saved Successfully.');
+            Yii::$app->session->setFlash('success', 'Record Saved Successfully.');
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -242,7 +243,13 @@ class PayperiodController extends Controller
 
         // Loop through each payment line and send the email
         foreach ($paymentLines as $paymentLine) {
-            \Yii::$app->queue->push(new SendEmailJob([
+            // Email Channel Job Queue
+            Yii::$app->queue->push(new SendEmailJob([
+                'paymentLineId' => $paymentLine->id,
+            ]));
+
+            // SMS Channel Job Queue
+            Yii::$app->queue->push(new SendSmsJob([
                 'paymentLineId' => $paymentLine->id,
             ]));
         }

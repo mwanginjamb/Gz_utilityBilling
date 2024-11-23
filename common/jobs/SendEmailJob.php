@@ -39,7 +39,7 @@ class SendEmailJob extends BaseObject implements JobInterface
     {
         Yii::info('Invoicing line: ' . $paymentLine->id, 'jobInfo');
         // Construct the email content based on payment line data
-        $subject = "Payment Notification for Invoice #" . 'KAV-INV-' . $paymentLine->id;
+        $subject = "Residential Bill Notification for Invoice #" . 'KAV-INV-' . $paymentLine->id;
         try {
             // Use Yii's mailer component to send the email
             $mail = Yii::$app

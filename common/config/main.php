@@ -49,6 +49,15 @@ return [
                 ],
                 [
                     'class' => \yii\log\FileTarget::class,
+                    'levels' => ['error', 'warning', 'info'],
+                    'categories' => ['sms'], // Custom category for job errors
+                    'logFile' => '@runtime/logs/sms.log', // Path to the log file
+                    'logVars' => [], // Exclude variables like $_SERVER, $_POST, etc., if unnecessary
+                    'maxFileSize' => 10240, // Maximum log file size in KB
+                    'maxLogFiles' => 10, // Number of log files to keep
+                ],
+                [
+                    'class' => \yii\log\FileTarget::class,
                     'levels' => ['info', 'error'],
                     'categories' => ['dbinfo'], // Custom category for job errors
                     'logFile' => '@runtime/logs/db-ops.log', // Path to the log file
@@ -64,6 +73,9 @@ return [
             'format' => Pdf::FORMAT_LEGAL,
             'orientation' => Pdf::ORIENT_PORTRAIT,
             'destination' => Pdf::DEST_STRING
+        ],
+        'sms' => [
+            'class' => 'common\helpers\Sms_Sender',
         ],
         'assetManager' => [
             'bundles' => [
