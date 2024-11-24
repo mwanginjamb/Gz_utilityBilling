@@ -53,11 +53,11 @@ class SendEmailJob extends BaseObject implements JobInterface
                 ->setSubject($subject)
                 ->send();
             Yii::info('Invoice mailed successfully : ' . VarDumper::dumpAsString($mail), 'jobInfo');
-            return ['status' => 'success', 'invoice_id' => $paymentLine->id];
+            // return ['status' => 'success', 'invoice_id' => $paymentLine->id];
         } catch (\Exception $e) {
             // Log and return the error message
             Yii::error("Error sending email for invoice #" . $paymentLine->id . ": " . $e->getMessage(), 'jobErrors');
-            return ['status' => 'failure', 'invoice_id' => $paymentLine->id, 'error' => $e->getMessage()];
+            // return ['status' => 'failure', 'invoice_id' => $paymentLine->id, 'error' => $e->getMessage()];
         }
     }
 }

@@ -96,6 +96,7 @@ class Sms extends BaseObject
 
         if ($this->_responseInfo['http_code'] == self::HTTP_CODE_CREATED) {
             $responseObject = json_decode($this->_responseBody);
+            Yii::info('Recipient Info: ' . VarDumper::dump($responseObject->SMSMessageData->Recipients), 'sms');
             return $responseObject->SMSMessageData->Recipients;
         }
 
@@ -116,8 +117,8 @@ class Sms extends BaseObject
             $responseBody = curl_exec($curlHandle_);
 
             if (self::Debug) {
-                // echo "Full response: " . print_r($responseBody, true) . "\n";
-                Yii::info(VarDumper::dump($responseBody), 'sms');
+                Yii::info('Full response: ' . VarDumper::dump($responseBody), 'sms');
+                echo "Full response: " . print_r($responseBody, true) . "\n";
             }
 
             $this->_responseInfo = curl_getinfo($curlHandle_);
@@ -125,6 +126,7 @@ class Sms extends BaseObject
             $this->_responseBody = $responseBody;
             curl_close($curlHandle_);
         } catch (\Exeption $e) {
+            \Yii::error('sms Gateway error: ' . VarDumper::dumpAsString($e->getMessage()), 'sms');
             curl_close($curlHandle_);
             throw $e;
         }

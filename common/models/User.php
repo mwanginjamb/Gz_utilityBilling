@@ -85,7 +85,22 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        //return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        // Sanitize input to remove unwanted characters
+        $input = htmlspecialchars(strip_tags(trim($username)), ENT_QUOTES, 'UTF-8');
+        $condition = [];
+        // Determine condition based on input type
+        if (filter_var($input, FILTER_VALIDATE_EMAIL)) {
+            // Input is a valid email
+            $condition = ['email' => $input];
+        } else {
+            // Input is treated as a username
+            $condition = ['username' => $input];
+        }
+        return static::find()
+            ->where(['status' => self::STATUS_ACTIVE])
+            ->andWhere($condition)
+            ->one();
     }
 
     /**

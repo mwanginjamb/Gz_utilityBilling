@@ -10,6 +10,7 @@
 namespace common\helpers;
 
 use yii\di\Container;
+use yii\helpers\VarDumper;
 
 class Sms_Sender
 {
@@ -39,6 +40,7 @@ class Sms_Sender
                 'sms' => $msg,
             ]);
         } catch (\AfricasTalkingGatewayException $e) {
+            \Yii::error('sms Gateway error: ' . VarDumper::dumpAsString($e->getMessage()), 'sms');
             return false;
         }
     }

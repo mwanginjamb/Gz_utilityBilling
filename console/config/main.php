@@ -48,6 +48,15 @@ return [
                     'maxFileSize' => 10240, // Maximum log file size in KB
                     'maxLogFiles' => 10, // Number of log files to keep
                 ],
+                [
+                    'class' => \yii\log\FileTarget::class,
+                    'levels' => ['error', 'warning', 'info'],
+                    'categories' => ['sms'], // Custom category for job errors
+                    'logFile' => '@runtime/logs/sms.log', // Path to the log file
+                    'logVars' => [], // Exclude variables like $_SERVER, $_POST, etc., if unnecessary
+                    'maxFileSize' => 10240, // Maximum log file size in KB
+                    'maxLogFiles' => 10, // Number of log files to keep
+                ],
             ],
         ],
         'urlManager' => [
@@ -56,6 +65,9 @@ return [
             'hostInfo' => env('APP_BASE_URL'),  // Full host URL
             'enablePrettyUrl' => true,               // Set to true if you are using pretty URLs
             'showScriptName' => false,               // Hide index.php if not using it in URL paths
+        ],
+        'sms' => [
+            'class' => 'common\helpers\Sms_Sender',
         ],
     ],
     'params' => $params,

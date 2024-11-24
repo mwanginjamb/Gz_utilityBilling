@@ -43,15 +43,21 @@ class SendSmsJob extends BaseObject implements JobInterface
         try {
             $verifyLink = env('APP_BASE_URL', 'http://utility.com') . '/tenant/view-invoice?invoiceid=' . $paymentLine->id;
             $billingType = $paymentLine->paymentheader->property->billing_type;
-            $rent = ($billingType == 'composite' || $billingType == 'rent') ? Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable, 'Ksh.') . '\r\n' : '';
-            $utilities = ($billingType == 'composite' || $billingType == 'utilities') ? Yii::$app->formatter->asCurrency($paymentLine->water_bill, 'Ksh.') . '\r\n' : '';
-            $service_charge = ($billingType == 'composite' || $billingType == 'service_charge') ? Yii::$app->formatter->asCurrency($paymentLine->service_charge, 'Ksh.') . '\r\n' : '';
+            $rent = ($billingType == 'composite' || $billingType == 'rent') ? Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable, 'Ksh.') . '\n' : '';
+            $utilities = ($billingType == 'composite' || $billingType == 'utilities') ? Yii::$app->formatter->asCurrency($paymentLine->water_bill, 'Ksh.') . '\n' : '';
+            $service_charge = ($billingType == 'composite' || $billingType == 'service_charge') ? Yii::$app->formatter->asCurrency($paymentLine->service_charge, 'Ksh.') . '\n' : '';
 
-            $subject = "Bill Notification for Invoice #" . ' Unit - ' . $paymentLine->id . '\r\n';
+            $subject = "Bill Notification for Invoice #" . ' Unit - ' . $paymentLine->id . '\n';
             $charges = $rent . $utilities . $service_charge;
             $total = Yii::$app->formatter->asCurrency($paymentLine->agreed_rent_payable + $paymentLine->water_bill + $paymentLine->service_charge, 'Ksh.') . '\r\n';
-            $link = '\r\n Verify invoice via this link: ' . $verifyLink;
+            $link = '\n Verify invoice via this link: ' . $verifyLink;
+
             $smsText = $subject . $charges . $total . $link;
+
+            // Optionally trim to fit within SMS limits
+            if (strlen($smsText) > 160) {
+                $smsText = substr($smsText, 0, 157) . '...';
+            }
 
             $no = '+254' . $paymentLine->tenant->cell_number;
 
