@@ -9,10 +9,11 @@ namespace common\models;
  */
 class TenantQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    public function init()
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->orderBy(['id' => SORT_DESC]);
+    }
+
 
     /**
      * {@inheritdoc}
