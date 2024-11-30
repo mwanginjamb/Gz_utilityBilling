@@ -56,18 +56,18 @@ class SendSmsJob extends BaseObject implements JobInterface
 
             // Optionally trim to fit within SMS limits
             if (strlen($smsText) > 160) {
-                $smsText = substr($smsText, 0, 157) . '...';
+                $smsText = substr($smsText, 0, 100) . '...';
             }
 
             $no = '+254' . $paymentLine->tenant->cell_number;
 
             Yii::$app->sms->sendSms($no, $smsText);
 
-            Yii::info('Job Log: SMS Invoice successfully ', 'sms');
+            Yii::info('Job Log: SMS Invoice successfully to -  ' . $no, 'sms');
             // return ['status' => 'success', 'invoice_id' => $paymentLine->id];
         } catch (\Exception $e) {
             // Log and return the error message
-            Yii::error("Error sending sms invoice #" . $paymentLine->id . ": " . $e->getMessage(), 'sms');
+            Yii::error("Error sending sms invoice #" . $paymentLine->id . " to - " . $no . ": " . $e->getMessage(), 'sms');
             //  return ['status' => 'failure', 'invoice_id' => $paymentLine->id, 'error' => $e->getMessage()];
         }
     }
