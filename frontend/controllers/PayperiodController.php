@@ -229,7 +229,7 @@ class PayperiodController extends Controller
 
     public function actionInvoice()
     {
-        $id = \Yii::$app->request->post('id');
+        $id = Yii::$app->request->post('id');
         $payPeriod = $this->findModel($id);
         // Retrieve the payment header
         $paymentHeader = Paymentheader::find()->joinWith('paymentlines')->where(['payperiod_id' => $payPeriod->id, 'property_id' => $payPeriod->property_id])->one();
@@ -242,7 +242,7 @@ class PayperiodController extends Controller
 
         // Loop through each payment line and send the email
         foreach ($paymentLines as $paymentLine) {
-            \Yii::$app->queue->push(new SendEmailJob([
+            Yii::$app->queue->push(new SendEmailJob([
                 'paymentLineId' => $paymentLine->id,
             ]));
         }
