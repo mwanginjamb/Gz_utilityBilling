@@ -7,11 +7,15 @@ use kartik\mpdf\Pdf;
 use common\models\Unit;
 use yii\web\Controller;
 use common\models\Tenant;
+use common\models\Visitor;
+use yii\httpclient\Client;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use common\models\Paymentlines;
 use common\models\TenantSearch;
+use yii\httpclient\CurlTransport;
+use yii\filters\ContentNegotiator;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -44,8 +48,30 @@ class TenantController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'contentNegotiator' => [
+                    'class' => ContentNegotiator::class,
+                    'only' => ['commit'],
+                    'formatParam' => '_format',
+                    'formats' => [
+                        'application/json' => \yii\web\Response::FORMAT_JSON,
+                    ]
+                ],
             ]
         );
+    }
+
+    public function beforeAction($action)
+    {
+
+        $ExceptedActions = [
+            'commit',
+        ];
+
+        if (in_array($action->id, $ExceptedActions)) {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     /**
@@ -76,6 +102,7 @@ class TenantController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
             'invoices' => Paymentlines::find()->joinWith('tenant')->where(['tenant_id' => $id])->all(),
+            'visitors' => Visitor::find()->where(['tenant_id' => $id])->all()
         ]);
     }
 
@@ -197,5 +224,62 @@ class TenantController extends Controller
             'content' => $base64Content
         ]);
 
+    }
+
+    public function actionCommit()
+    {
+        try {
+            $endpoint = Yii::$app->request->post('service');
+            $field = Yii::$app->request->post('name');
+            $value = Yii::$app->request->post('value');
+
+            $payload = [
+                $field => $value
+            ];
+
+            $client = new Client([
+                'transport' => CurlTransport::class,
+            ]);
+
+            $request = $client->createRequest()
+                ->setMethod('PUT')
+                ->setUrl($endpoint)
+                ->addHeaders(['Content-Type' => 'application/json'])
+                ->setFormat(Client::FORMAT_JSON)  // Ensures JSON encoding
+                ->setData($payload)
+                ->setOptions([
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false
+                ]);
+
+            $response = $request->send();
+
+            if ($response->isOk) { // Check if the response status is 200-299
+                return $response->data; // Return the relevant response data
+            } else {
+                // Log error details if needed and return a clear message
+                return [
+                    'status' => $response->statusCode,
+                    'error' => $response->data ?? 'Unexpected error occurred'
+                ];
+            }
+        } catch (\Exception $e) {
+            return "HTTP request failed with error: " . $e->getMessage();
+        }
+
+    }
+
+    public function actionVisitor()
+    {
+        $tenant = Yii::$app->request->post('tenant');
+        $model = new Visitor();
+        $model->tenant_id = $tenant;
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Record Created Successfully.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Could not create record at this moment.');
+        }
+
+        return $this->redirect(['view', 'id' => $tenant]);
     }
 }

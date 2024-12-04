@@ -53,6 +53,9 @@ return [
                         'apiv1/schedule',
                         'apiv1/invoicelines',
                         'apiv1/tenant',
+                        'apiv1/asset',
+                        'apiv1/visitor',
+
                     ],
                     'except' => ['delete'],
 

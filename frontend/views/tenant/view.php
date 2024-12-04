@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -61,6 +62,89 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) ?>
             </div>
             <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="text">Asset Affiliation</div>
+                                </div>
+                                <div class="card-tools">
+                                    <?= Html::a('+ <i class="ion-ios-briefcase"></i>', ['asset'], [
+                                        'class' => 'btn btn-sm btn-info',
+                                        'title' => 'Add an asset you own e.g a vehicle',
+                                        'data' => [
+                                            'params' => [
+                                                'tenant' => $model->id
+                                            ],
+                                            'method' => 'POST'
+                                        ]
+                                    ]) ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <div class="text">Visitor Records</div>
+                                </div>
+                                <div class="card-tools">
+                                    <?= Html::a('+ <i class="ion-ios-people"></i>', ['visitor'], [
+                                        'class' => 'btn btn-sm btn-info',
+                                        'title' => 'Add visitor',
+                                        'data' => [
+                                            'params' => [
+                                                'tenant' => $model->id
+                                            ],
+                                            'method' => 'POST'
+                                        ]
+                                    ]) ?>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                            <?php if ($visitors): ?>
+                                    <table class="table table-boardered">
+                                        <theader>
+                                            <tr>
+                                                <td class="text text-bold text-center text-info">Name</td>
+                                                <td class="text text-bold text-center text-info">Cell No.</td>
+                                                <td class="text text-bold text-center text-info">Email</td>
+                                            </tr>
+                                        </theader>
+                                        <tbody>
+
+                                         <?php foreach ($visitors as $v):
+                                             $endpoint = Url::home(true) . 'apiv1/visitor/' . $v->id ?>
+                                            <tr>
+                                                <td data-key="<?= $v->id ?>" data-name="fullnames"
+                                                    class="fullnames text-info text text-center" data-service="<?= $endpoint ?>"
+                                                    ondblclick="addInput(this)">
+                                                    <?= $v->fullnames?? 'Dbl click to type ...' ?>
+                                                </td>
+                                                <td data-key="<?= $v->id ?>" data-name="cell_number"
+                                                    class="cell_number text-info text text-center" data-service="<?= $endpoint ?>"
+                                                    ondblclick="addInput(this)">
+                                                    <?= $v->cell_number ?>
+                                                </td>
+                                                <td data-key="<?= $v->id ?>" data-name="email_address"
+                                                    class="email_address text-info text text-center" data-service="<?= $endpoint ?>"
+                                                    ondblclick="addInput(this)">
+                                                    <?= $v->email_address ?>
+                                                </td>
+                                            </tr>
+
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php else: ?>
+                                    <div class="alert my-3">No visitors recorded yet.</div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card card-info">
                     <div class="card-header">
                         <div class="card-title">Tenant Invoices</div>
