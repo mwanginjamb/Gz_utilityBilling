@@ -119,20 +119,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                          <?php foreach ($visitors as $v):
                                              $endpoint = Url::home(true) . 'apiv1/visitors/' . $v->id ?>
                                             <tr>
-                                                <td data-key="<?= $v->id ?>" data-name="fullnames"
+                                                <td data-name="fullnames"
                                                     class="fullnames text text-center" data-service="<?= $endpoint ?>"
                                                     ondblclick="addInput(this)">
                                                     <?= $v->fullnames?? 'Dbl click to  type ...' ?>
                                                 </td>
-                                                <td data-key="<?= $v->id ?>" data-name="cell_number"
+                                                <td data-name="cell_number"
                                                     class="cell_number text text-center" data-service="<?= $endpoint ?>"
                                                     ondblclick="addInput(this)">
-                                                    <?= $v->cell_number ?>
+                                                    <?= $v->cell_number??'' ?>
                                                 </td>
-                                                <td data-key="<?= $v->id ?>" data-name="email_address"
+                                                <td data-name="email_address"
                                                     class="email_address text text-center" data-service="<?= $endpoint ?>"
                                                     ondblclick="addInput(this)">
-                                                    <?= $v->email_address ?>
+                                                    <?= $v->email_address?? '' ?>
                                                 </td>
                                             </tr>
 

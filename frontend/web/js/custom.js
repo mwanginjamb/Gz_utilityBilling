@@ -42,7 +42,7 @@ const Toast = Swal.mixin({
 
 function closeInput(elm) {
     var td = elm.parentNode;
-    var value = elm.value;
+    var value = trim(elm.value);
 
     /** Handle Checkbox state */
     var child = td.children[0];
