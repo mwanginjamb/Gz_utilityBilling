@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <tbody>
 
                                          <?php foreach ($visitors as $v):
-                                             $endpoint = Url::home(true) . 'apiv1/visitor/' . $v->id ?>
+                                             $endpoint = Url::home(true) . 'apiv1/visitors/' . $v->id ?>
                                             <tr>
                                                 <td data-key="<?= $v->id ?>" data-name="fullnames"
                                                     class="fullnames text text-center" data-service="<?= $endpoint ?>"
