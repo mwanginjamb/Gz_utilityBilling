@@ -105,6 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                             <div class="card-body">
                             <?php if ($visitors): ?>
+                                <div class="table-responsive">
                                     <table class="table table-boardered">
                                         <theader>
                                             <tr>
@@ -119,17 +120,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                              $endpoint = Url::home(true) . 'apiv1/visitor/' . $v->id ?>
                                             <tr>
                                                 <td data-key="<?= $v->id ?>" data-name="fullnames"
-                                                    class="fullnames text-info text text-center" data-service="<?= $endpoint ?>"
+                                                    class="fullnames text text-center" data-service="<?= $endpoint ?>"
                                                     ondblclick="addInput(this)">
-                                                    <?= $v->fullnames?? 'Dbl click to type ...' ?>
+                                                    <?= $v->fullnames?? 'Dbl click to  type ...' ?>
                                                 </td>
                                                 <td data-key="<?= $v->id ?>" data-name="cell_number"
-                                                    class="cell_number text-info text text-center" data-service="<?= $endpoint ?>"
+                                                    class="cell_number text text-center" data-service="<?= $endpoint ?>"
                                                     ondblclick="addInput(this)">
                                                     <?= $v->cell_number ?>
                                                 </td>
                                                 <td data-key="<?= $v->id ?>" data-name="email_address"
-                                                    class="email_address text-info text text-center" data-service="<?= $endpoint ?>"
+                                                    class="email_address text text-center" data-service="<?= $endpoint ?>"
                                                     ondblclick="addInput(this)">
                                                     <?= $v->email_address ?>
                                                 </td>
@@ -138,6 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>
+                                </div>
                                 <?php else: ?>
                                     <div class="alert my-3">No visitors recorded yet.</div>
                                 <?php endif; ?>
