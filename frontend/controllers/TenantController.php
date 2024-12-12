@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\AssetAffiliation;
 use Yii;
 use kartik\mpdf\Pdf;
 use common\models\Unit;
@@ -102,7 +103,8 @@ class TenantController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
             'invoices' => Paymentlines::find()->joinWith('tenant')->where(['tenant_id' => $id])->all(),
-            'visitors' => Visitor::find()->where(['tenant_id' => $id])->all()
+            'visitors' => Visitor::find()->where(['tenant_id' => $id])->all(),
+            'assets' => AssetAffiliation::find()->where(['tenant_id' => $id])->all(),
         ]);
     }
 
@@ -273,6 +275,19 @@ class TenantController extends Controller
     {
         $tenant = Yii::$app->request->post('tenant');
         $model = new Visitor();
+        $model->tenant_id = $tenant;
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Record Created Successfully.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Could not create record at this moment.');
+        }
+
+        return $this->redirect(['view', 'id' => $tenant]);
+    }
+    public function actionAsset()
+    {
+        $tenant = Yii::$app->request->post('tenant');
+        $model = new AssetAffiliation();
         $model->tenant_id = $tenant;
         if ($model->save()) {
             Yii::$app->session->setFlash('success', 'Record Created Successfully.');

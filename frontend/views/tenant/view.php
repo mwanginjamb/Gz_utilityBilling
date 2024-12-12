@@ -82,6 +82,39 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ]) ?>
                                 </div>
                             </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <td class="fw-bold">Asset</td>
+                                                <td class="fw-bold">Unique ID</td>
+                                                <td class="fw-bold">Action</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($assets as $v):
+                                                $endpoint = Url::home(true) . 'apiv1/assets/' . $v->id ?>
+                                                <tr>
+                                                    <td data-name="asset_description" class="asset_description text text-center" data-service="<?= $endpoint ?>"
+                                                        ondblclick="addInput(this)">
+                                                        <?= $v->asset_description ?? '' ?>
+                                                    </td>
+                                                    <td data-name="asset_unique_identifier" class="asset_unique_identifier text text-center" data-service="<?= $endpoint ?>"
+                                                        ondblclick="addInput(this)">
+                                                        <?= $v->asset_unique_identifier ?? '' ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= Html::a('<i class="bi bi-trash"></i>',$endpoint,['class' => 'btn btn-danger btn-sm delete']) ?>
+                                                    </td>
+                                                
+                                            </tr>
+                                            
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
