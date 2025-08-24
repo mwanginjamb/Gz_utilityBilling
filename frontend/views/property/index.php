@@ -45,10 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= Yii::$app->formatter->asDate($model->build_date) ?></td>
                             <td><?= Yii::$app->formatter->asDateTime($model->created_at) ?></td>
                             <td><?= Yii::$app->formatter->asDateTime($model->updated_at) ?></td>
-                            <td><?= Html::a('<i class="fa fa-edit"></i>update', ['update', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
+                            <td><?= Html::a('<i class="fa fa-edit mx-1"></i> update', ['update', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
                             </td>
                             <td>
-                                <?= Html::a('<i class="fa fa-eye"></i>view', ['view', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary']) ?>
+                                <?= Html::a('<i class="fa fa-eye mx-1"></i> view', ['view', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary']) ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

@@ -31,6 +31,19 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         'method' => 'post',
                     ],
                 ]) : '' ?>
+                <?= (($paymentheader && is_array($paymentheader['paymentlines'])) && !$model->isNewRecord && $model->payperiodstatus->name == 'Open') ? Html::a(Yii::t('app', '<i class="fas fa-redo mx-1"></i>Regenerate Pay period'), ['regenerate'], [
+                    'class' => 'btn btn-dark',
+                    'data' => [
+                        'confirm' => Yii::t('app', 'Are you sure you want to regenerate this pay period ?'),
+                        'params' => [
+                            'id' => $model->id,
+                            'payperiod' => $model->id,
+                            'property' => $model->property_id,
+                            'paymentheaderID' => $paymentheader['id'],
+                        ],
+                        'method' => 'post',
+                    ],
+                ]) : '' ?>
                 <?= (!$model->isNewRecord && (!$paymentheader || !array_key_exists('paymentlines', $paymentheader))) ? Html::a(Yii::t('app', 'Generate Payment Header'), ['generate-header'], [
                     'class' => 'btn btn-info',
                     'data' => [

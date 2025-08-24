@@ -95,7 +95,7 @@ class UtilityComponent extends Component
 
     public function webroot()
     {
-        return \Yii::getAlias(@$webroot);
+        return Yii::getAlias(@$webroot);
     }
 
 }

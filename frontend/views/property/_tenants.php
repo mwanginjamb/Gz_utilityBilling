@@ -52,7 +52,7 @@ use yii\bootstrap5\Html;
                                 <td><?= $unit->unit_name ?></td>
                                 <td data-name="principle_tenant_name" class="principle_tenant_name text-info"
                                     data-service="<?= $endpoint ?>" ondblclick="addInput(this)">
-                                    <?= Html::a($unit->tenant['principle_tenant_name'], [Url::toRoute(['tenant/view', 'id' => $unit->tenant['id']])]) ?>
+                                    <?= Html::a($unit->tenant['principle_tenant_name'], [Url::toRoute(['tenant/view', 'id' => $unit->tenant['id'], 'property' => $model->id])]) ?>
                                 </td>
                                 <td data-name="cell_number" class="cell_number text-info" data-service="<?= $endpoint ?>"
                                     ondblclick="addInput(this)">

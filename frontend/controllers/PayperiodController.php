@@ -2,7 +2,9 @@
 
 namespace frontend\controllers;
 
+use common\models\Paymentlines;
 use Yii;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\httpclient\Client;
 use common\models\Property;
@@ -208,6 +210,35 @@ class PayperiodController extends Controller
             Yii::$app->session->setFlash('error', 'Could not create a payperiod payment header.');
         }
         return $this->redirect(['update', 'id' => Yii::$app->request->post('payperiod')]);
+    }
+
+    // Regenerate Payment Header
+    public function actionRegenerate()
+    {
+        $id = Yii::$app->request->post('id');
+        $payPeriod = Yii::$app->request->post('payperiod');
+        $property = Yii::$app->request->post('property');
+        $paymentheaderID = Yii::$app->request->post('paymentheaderID');
+        // Delete Payment header
+        $deleteHeader = Paymentheader::findOne($paymentheaderID)->delete();
+
+        if ($deleteHeader) {
+            Yii::$app->session->setFlash('info', 'Billing Voucher for this property and period has been deleted.');
+            // Generate a new payment header
+            $paymentHeader = new Paymentheader();
+            $paymentHeader->payperiod_id = $payPeriod;
+            $paymentHeader->property_id = $property;
+            if ($paymentHeader->save()) {
+                Yii::$app->session->setFlash('success', 'Billing Voucher for this property and period has been recreated afresh.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Could not create a payperiod payment header.');
+                // Show model errors
+                VarDumper::dump($paymentHeader->errors);
+                exit;
+            }
+        }
+
+        return $this->redirect(['update', 'id' => $id]);
     }
 
     /**

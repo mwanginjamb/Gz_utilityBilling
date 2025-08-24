@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1 class="card-title"><?= Html::encode($this->title) ?></h1>
         <div class="card-tools">
 
-            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id, 'property' => Yii::$app->request->get('property')?: $model->unit->property->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
                 'data' => [

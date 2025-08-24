@@ -238,7 +238,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <!--end Aprroval Management-->
 
                         <!-- Tenants -->
-                        <!--<li
+                        <li
                             class="nav-item has-treeview  <?= Yii::$app->utility->currentCtrl(['tenant']) ? 'menu-open' : '' ?>">
                             <a href="#"
                                 class="nav-link <?= Yii::$app->utility->currentCtrl('tenant') ? 'active' : '' ?>">
@@ -258,17 +258,17 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 </li>
 
                             </ul>
-                        </li>-->
+                        </li>
 
 
-                        <!-- Fleet mgt -->
+                        <!-- Pay Periods -->
 
 
                         <li
-                            class="nav-item has-treeview  <?= Yii::$app->utility->currentCtrl(['payperiod', 'payperiodstatus']) ? 'menu-open' : '' ?>">
+                            class="nav-item has-treeview  <?= Yii::$app->utility->currentCtrl(['payperiod']) ? 'menu-open' : '' ?>">
                             <a href="#"
-                                class="nav-link <?= Yii::$app->utility->currentCtrl(['payperiod', 'payperiodstatus']) ? 'active' : '' ?>">
-                                <i class="nav-icon fas fa-car"></i>
+                                class="nav-link <?= Yii::$app->utility->currentCtrl(['payperiod']) ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-dollar-sign"></i>
                                 <p>
                                     Invoicing
                                     <i class="right fas fa-angle-left"></i>
@@ -279,12 +279,39 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>payperiod"
                                         class="nav-link <?= Yii::$app->utility->currentaction('payperiod', 'index') ? 'active' : '' ?>">
-                                        <i class="fa fa-car nav-icon"></i>
+                                        <i class="fa fa-calendar nav-icon"></i>
                                         <p>Payperiods List</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
+
+                        <!-- Settings -->
+
+                        <li
+                            class="nav-item has-treeview  <?= Yii::$app->utility->currentCtrl(['payperiodstatus']) ? 'menu-open' : '' ?>">
+                            <a href="#"
+                                class="nav-link <?= Yii::$app->utility->currentCtrl(['payperiodstatus']) ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p>
+                                    Settings
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>payperiodstatus"
+                                        class="nav-link <?= Yii::$app->utility->currentaction('payperiodstatus', 'index') ? 'active' : '' ?>">
+                                        <i class="fa fa-check nav-icon"></i>
+                                        <p>Payperiod Statuses</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
