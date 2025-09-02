@@ -76,10 +76,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if (Yii::$app->user->identity->usertype == 'admin') {
+        if (Yii::$app->user->identity->usertype == 'admin') { // Admin Dashboard
             return $this->redirect(Url::toRoute(['property/index']));
+        } else { // return tenant profile
+            $tenant = Yii::$app->user->identity->getTenant()->one();
+            $tenant_id = $tenant->id;
+            $property_id = $tenant->unit->property->id;
+            return $this->redirect(Url::toRoute(['tenant/view', 'id' => $tenant_id, 'property' => $property_id]));
         }
-        return $this->render('index');
     }
 
     /**

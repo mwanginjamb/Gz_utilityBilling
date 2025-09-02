@@ -213,4 +213,15 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    /**
+     * Summary of getTenant
+     * @return Yii\db\ActiveQuery
+     * Since we do not have a related user ID at import of data,
+     * then relationship is made via tenant.billing_email_address
+     */
+    public function getTenant()
+    {
+        return $this->hasOne(Tenant::class, ['billing_email_address' => 'email']);
+    }
 }
