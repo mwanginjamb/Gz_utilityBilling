@@ -130,6 +130,19 @@ class Paymentlines extends \yii\db\ActiveRecord
                 $this->updateAttributes(['opening_water_readings' => $previousPaymentline->closing_water_readings]);
             }
         }
+
+        /* calculate water bill
+        consider opening reading and closing reading, agreed water rate and units used
+        upon update of closing reading
+        calculate units used = (closing reading - opening reading)
+        calculate water bill = (closing reading - opening reading) * agreed water rate
+        */
+        if (!$insert) {
+            if ($this->closing_water_readings != $this->opening_water_readings) {
+                $this->updateAttributes(['units_used' => $this->closing_water_readings - $this->opening_water_readings]);
+                $this->updateAttributes(['water_bill' => ($this->closing_water_readings - $this->opening_water_readings) * $this->agreed_water_rate]);
+            }
+        }
     }
 
 
