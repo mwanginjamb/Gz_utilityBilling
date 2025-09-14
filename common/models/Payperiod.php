@@ -13,7 +13,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string|null $period
  * @property string|null $body
  * @property int|null $property_id
- * @property int|null $payperiodstatus_id
+ * @property int|null $payperiodstatus_id (Open, Closed)
  * @property int|null $created_at
  * @property int|null $update_at
  * @property int|null $created_by
@@ -28,6 +28,7 @@ class Payperiod extends \yii\db\ActiveRecord
 {
 
     const STATUS_OPEN = 1;
+    const STATUS_CLOSED = 2;
     /**
      * {@inheritdoc}
      */

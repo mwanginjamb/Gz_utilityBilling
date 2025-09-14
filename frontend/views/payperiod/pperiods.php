@@ -43,7 +43,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $item->body ?></td>
                             <td><?= $item->payperiodstatus->name ?></td>
                             <td>
-                                <?= ($item->payperiodstatus->name == 'Open') ? Html::a('Update', ['update', 'id' => $item->id], ['_target' => '_blank', 'class' => 'btn btn-warning']) : '' ?>
+                                <?= ($item->payperiodstatus == Payperiod::STATUS_OPEN) ? Html::a('Update', ['update', 'id' => $item->id], ['_target' => '_blank', 'class' => 'btn btn-warning']) : '' ?>
+                                <?= ($item->payperiodstatus == Payperiod::STATUS_CLOSED) ? Html::a('<i class="fas fa-redo mx-1"></i>Reopen', ['reopen'], [
+                                    'class' => 'btn btn-success',
+                                    'data' => [
+                                        'confirm' => Yii::t('app', 'Are you sure you want to reopen this pay period ?'),
+                                        'params' => [
+                                            'id' => $item->id
+                                        ],
+                                        'method' => 'post',
+                                    ]
+                                ]) : '' ?>
                                 <?= Html::a('view', ['view', 'id' => $item->id], ['target' => '_blank', 'class' => 'btn btn-info']) ?>
                             </td>
                         </tr>

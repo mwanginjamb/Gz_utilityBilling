@@ -191,7 +191,19 @@ class PayperiodController extends Controller
         $id = \Yii::$app->request->post('id');
         $model = $this->findModel($id);
         if ($model) {
-            $model->payperiodstatus_id = 2;
+            $model->payperiodstatus_id = Payperiod::STATUS_CLOSED;
+            $model->save();
+        }
+        return $this->redirect(['view', 'id' => $id]);
+    }
+
+    // reopen payperiod entry
+    public function actionReopen()
+    {
+        $id = \Yii::$app->request->post('id');
+        $model = $this->findModel($id);
+        if ($model) {
+            $model->payperiodstatus_id = Payperiod::STATUS_OPEN;
             $model->save();
         }
         return $this->redirect(['view', 'id' => $id]);
