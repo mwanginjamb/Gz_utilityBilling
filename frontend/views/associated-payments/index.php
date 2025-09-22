@@ -52,10 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td><?= $index + 1; ?></td>
                             <td><?= Html::encode($model->paymentline_id); ?></td>
+
                             <td data-key="<?= $model->id ?>" data-name="payment_description" data-service="<?= $endpoint ?>"
-                                ondblclick="addInput(this)"></td><?= Html::encode($model->payment_description); ?></td>
+                                ondblclick="addInput(this)"><?= Html::encode($model->payment_description); ?></td>
+
                             <td data-key="<?= $model->id ?>" data-name="payment_amount" data-service="<?= $endpoint ?>"
-                                ondblclick="addInput(this,'number')"></td><?= Html::encode($model->payment_amount); ?></td>
+                                ondblclick="addInput(this,'number')"><?= Html::encode($model->payment_amount); ?></td>
                             <td><?= Html::encode(Yii::$app->formatter->asDatetime($model->created_at)); ?></td>
                             <td>
                                 <?= Html::a('<i class="fas fa-trash"></i>', $endpoint, [
