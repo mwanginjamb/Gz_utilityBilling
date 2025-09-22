@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-paymentline_id' => Yii::$app->request->get('invoiceid'),
                             'data-endpoint' => Url::home(true) . 'apiv1/associatedpayments',
                             'data-template' => 1,
-                            //'data-reload' => 1
+                            'data-reload' => 1
                         ]) ?></th>
                     </tr>
                 </thead>
@@ -52,10 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr>
                             <td><?= $index + 1; ?></td>
                             <td><?= Html::encode($model->paymentline_id); ?></td>
-                            <td data-key="<?= $model->id ?>" data-name="sub_clause" data-service="<?= $endpoint ?>"
+                            <td data-key="<?= $model->id ?>" data-name="payment_description" data-service="<?= $endpoint ?>"
                                 ondblclick="addInput(this)"></td><?= Html::encode($model->payment_description); ?></td>
-                            <td data-key="<?= $model->id ?>" data-name="sub_clause" data-service="<?= $endpoint ?>"
-                                ondblclick="addInput(this)"></td><?= Html::encode($model->payment_amount); ?></td>
+                            <td data-key="<?= $model->id ?>" data-name="payment_amount" data-service="<?= $endpoint ?>"
+                                ondblclick="addInput(this,'number')"></td><?= Html::encode($model->payment_amount); ?></td>
                             <td><?= Html::encode(Yii::$app->formatter->asDatetime($model->created_at)); ?></td>
                             <td>
                                 <?= Html::a('<i class="fas fa-trash"></i>', $endpoint, [
