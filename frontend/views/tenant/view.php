@@ -197,6 +197,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td class="text text-bold">Total</td>
                                             <td class="text text-bold">View Invoice</td>
                                             <td class="text text-bold">Download Invoice</td>
+                                            <td class="text text-bold">Associated Payments</td>
                                         </tr>
 
                                         </thead>
@@ -213,10 +214,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         <td><?= Yii::$app->formatter->asCurrency(($line->agreed_rent_payable + $line->water_bill + $line->service_charge), 'Ksh.') ?>
                                                         </td>
                                                         <td>
-                                                            <?= Html::a('view Invoice', ['view-invoice', 'invoiceid' => $line->id], ['class' => 'btn btn-sm btn-warning', 'title' => 'View a Detailed Invoice', 'target' => '_blank']) ?>
+                                                            <?= Html::a('<i class="fas fa-eye mx-1"></i>view', ['view-invoice', 'invoiceid' => $line->id], ['class' => 'btn btn-sm btn-outline-primary', 'title' => 'View a Detailed Invoice', 'target' => '_blank']) ?>
                                                         </td>
                                                         <td>
-                                                            <?= Html::a('Download Invoice', ['report', 'invoiceid' => $line->id], ['class' => 'btn btn-sm btn-warning', 'title' => 'View a Detailed Invoice', 'target' => '_blank']) ?>
+                                                            <?= Html::a('<i class="fas fa-download mx-1"></i>Invoice', ['report', 'invoiceid' => $line->id], ['class' => 'btn btn-sm btn-warning', 'title' => 'Download Invoice', 'target' => '_blank']) ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= Html::a('<i class="fas fa-plus mx-1"></i>Other Payments', ['associated-payments/index', 'invoiceid' => $line->id], ['class' => 'btn btn-sm btn-outline-dark', 'title' => 'Add other associated payments that relate to this invoice but do not affect it e.g power bills, billed by the power company.', 'target' => '_blank']) ?>
                                                         </td>
                                                     </tr>
 

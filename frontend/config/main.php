@@ -55,6 +55,7 @@ return [
                         'apiv1/tenant',
                         'apiv1/asset',
                         'apiv1/visitor',
+                        'apiv1/associatedpayments',
 
                     ],
                     'except' => ['delete'],
