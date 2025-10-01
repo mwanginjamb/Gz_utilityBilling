@@ -268,4 +268,12 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
+
+    public function actionInventory()
+    {
+        $assets = \common\models\AssetAffiliation::find()->with('tenant')->all();
+        return $this->render('inventory', [
+            'assets' => $assets
+        ]);
+    }
 }
