@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         <?= $v->asset_unique_identifier ?? '' ?>
                                                     </td>
                                                     <td>
-                                                        <?= Html::a('<i class="bi bi-trash"></i>',$endpoint,['class' => 'btn btn-danger btn-sm delete']) ?>
+                                                        <?= Html::a('<i class="fas fa-trash"></i>',$endpoint,['class' => 'btn btn-danger btn-sm delete']) ?>
                                                     </td>
                                                 
                                             </tr>
