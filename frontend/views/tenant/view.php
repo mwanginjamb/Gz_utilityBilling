@@ -208,10 +208,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     $bg = '';
                                                     if($line->paymentheader->payperiod->payperiodstatus->name == 'Closed')
                                                     {
-                                                        $bg = 'bg-success';
+                                                        $bg = 'table-success';
                                                     }else if($line->paymentheader->payperiod->payperiodstatus->name == 'Open')
                                                     {
-                                                        $bg = 'bg-warning';    
+                                                        $bg = 'table-warning';    
                                                     }
                                                     ?>
                                                     <tr class="<?= $bg ?>">
