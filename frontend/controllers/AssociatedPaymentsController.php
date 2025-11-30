@@ -64,10 +64,23 @@ class AssociatedPaymentsController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($invoiceid)
     {
         $searchModel = new AssociatedPaymentsSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        // modify data provider query to filter by paymentline_id
+        $query = AssociatedPayments::find()->where(['paymentline_id' => $invoiceid]);
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ],
+            ],
+        ]);
+        // $dataProvider = $searchModel->search($this->request->queryParams);
         $invoice = Paymentlines::findOne(Yii::$app->request->get('invoiceid'));
 
         return $this->render('index', [
