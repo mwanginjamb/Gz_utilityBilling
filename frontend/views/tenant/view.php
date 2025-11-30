@@ -204,8 +204,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <tbody>
                                             <?php if ($invoices && is_array($invoices)):
                                                 foreach ($invoices as $line):
+                                                    
+                                                    $bg = '';
+                                                    if($line->paymentheader->payperiod->payperiodstatus->name == 'Closed')
+                                                    {
+                                                        $bg = 'bg-success';
+                                                    }else if($line->paymentheader->payperiod->payperiodstatus->name == 'Open')
+                                                    {
+                                                        $bg = 'bg-warning';    
+                                                    }
                                                     ?>
-                                                    <tr>
+                                                    <tr class="<?= $bg ?>">
                                                         <td><?= $line->paymentheader->payperiod->body . ' - ' . $line->paymentheader->payperiod->payperiodstatus->name ?>
                                                         </td>
                                                         <!-- <td><?= $line->agreed_rent_payable ?></td>
