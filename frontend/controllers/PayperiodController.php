@@ -2,11 +2,23 @@
 
 namespace frontend\controllers;
 
-use common\models\Payperiod;
-use common\models\PayperiodSearch;
+use common\models\Paymentlines;
+use Yii;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\httpclient\Client;
+use common\models\Property;
 use yii\filters\VerbFilter;
+use common\models\Payperiod;
+use yii\helpers\ArrayHelper;
+use common\jobs\SendEmailJob;
+use yii\filters\AccessControl;
+use common\models\Paymentheader;
+use yii\httpclient\CurlTransport;
+use common\models\PayperiodSearch;
+use common\models\Payperiodstatus;
+use yii\filters\ContentNegotiator;
+use yii\web\NotFoundHttpException;
 
 /**
  * PayperiodController implements the CRUD actions for Payperiod model.
@@ -21,14 +33,48 @@ class PayperiodController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'index', 'update', 'view', 'create'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                        'generate-header' => ['POST'],
                     ],
+                ],
+                'contentNegotiator' => [
+                    'class' => ContentNegotiator::class,
+                    'only' => ['commit'],
+                    'formatParam' => '_format',
+                    'formats' => [
+                        'application/json' => \yii\web\Response::FORMAT_JSON,
+                    ]
                 ],
             ]
         );
+    }
+
+    public function beforeAction($action)
+    {
+
+        $ExceptedActions = [
+            'commit',
+        ];
+
+        if (in_array($action->id, $ExceptedActions)) {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     /**
@@ -47,6 +93,16 @@ class PayperiodController extends Controller
         ]);
     }
 
+    public function actionPropertyPayperiods()
+    {
+        $id = \Yii::$app->request->post('id');
+        $payperiods = Payperiod::find()->where(['property_id' => $id])->all();
+
+        return $this->render('pperiods', [
+            'items' => $payperiods
+        ]);
+    }
+
     /**
      * Displays a single Payperiod model.
      * @param int $id ID
@@ -55,8 +111,10 @@ class PayperiodController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'paymentheader' => Paymentheader::find()->joinWith('paymentlines')->where(['payperiod_id' => $model->id, 'property_id' => $model->property_id])->asArray()->one(),
         ]);
     }
 
@@ -65,9 +123,13 @@ class PayperiodController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($property = null)
     {
+
         $model = new Payperiod();
+        if ($property) {
+            $model->property_id = $property;
+        }
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -79,6 +141,10 @@ class PayperiodController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'properties' => ArrayHelper::map(Property::find()->all(), 'id', 'name'),
+            'payperiodstatus' => ArrayHelper::map(Payperiodstatus::find()->all(), 'id', 'name'),
+            'paymentheader' => []
+
         ]);
     }
 
@@ -94,11 +160,15 @@ class PayperiodController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            \Yii::$app->session->setFlash('success', 'Record Saved Successfully.');
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'properties' => ArrayHelper::map(Property::find()->all(), 'id', 'name'),
+            'payperiodstatus' => ArrayHelper::map(Payperiodstatus::find()->all(), 'id', 'name'),
+            'paymentheader' => Paymentheader::find()->joinWith('paymentlines')->where(['payperiod_id' => $model->id, 'property_id' => $model->property_id])->asArray()->one()
         ]);
     }
 
@@ -116,6 +186,73 @@ class PayperiodController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionClose()
+    {
+        $id = \Yii::$app->request->post('id');
+        $model = $this->findModel($id);
+        if ($model) {
+            $model->payperiodstatus_id = Payperiod::STATUS_CLOSED;
+            $model->save();
+        }
+        return $this->redirect(['view', 'id' => $id]);
+    }
+
+    // reopen payperiod entry
+    public function actionReopen()
+    {
+        $id = \Yii::$app->request->post('id');
+        $model = $this->findModel($id);
+        if ($model) {
+            $model->payperiodstatus_id = Payperiod::STATUS_OPEN;
+            $model->save();
+        }
+        return $this->redirect(['view', 'id' => $id]);
+    }
+
+    public function actionGenerateHeader()
+    {
+
+        $paymentHeader = new Paymentheader();
+        $paymentHeader->payperiod_id = Yii::$app->request->post('payperiod');
+        $paymentHeader->property_id = Yii::$app->request->post('property');
+
+        if ($paymentHeader->save()) {
+            Yii::$app->session->setFlash('success', 'Billing Voucher for this property and period has been created.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Could not create a payperiod payment header.');
+        }
+        return $this->redirect(['update', 'id' => Yii::$app->request->post('payperiod')]);
+    }
+
+    // Regenerate Payment Header
+    public function actionRegenerate()
+    {
+        $id = Yii::$app->request->post('id');
+        $payPeriod = Yii::$app->request->post('payperiod');
+        $property = Yii::$app->request->post('property');
+        $paymentheaderID = Yii::$app->request->post('paymentheaderID');
+        // Delete Payment header
+        $deleteHeader = Paymentheader::findOne($paymentheaderID)->delete();
+
+        if ($deleteHeader) {
+            Yii::$app->session->setFlash('info', 'Billing Voucher for this property and period has been deleted.');
+            // Generate a new payment header
+            $paymentHeader = new Paymentheader();
+            $paymentHeader->payperiod_id = $payPeriod;
+            $paymentHeader->property_id = $property;
+            if ($paymentHeader->save()) {
+                Yii::$app->session->setFlash('success', 'Billing Voucher for this property and period has been recreated afresh.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Could not create a payperiod payment header.');
+                // Show model errors
+                VarDumper::dump($paymentHeader->errors);
+                exit;
+            }
+        }
+
+        return $this->redirect(['update', 'id' => $id]);
+    }
+
     /**
      * Finds the Payperiod model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -131,4 +268,73 @@ class PayperiodController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
+
+    public function actionInvoice()
+    {
+        $id = Yii::$app->request->post('id');
+        $payPeriod = $this->findModel($id);
+        // Retrieve the payment header
+        $paymentHeader = Paymentheader::find()->joinWith('paymentlines')->where(['payperiod_id' => $payPeriod->id, 'property_id' => $payPeriod->property_id])->one();
+        if (!$paymentHeader) {
+            throw new NotFoundHttpException("Payment Header not found.");
+        }
+
+        // Get all associated payment lines
+        $paymentLines = $paymentHeader->paymentlines;
+
+        // Loop through each payment line and send the email
+        foreach ($paymentLines as $paymentLine) {
+            Yii::$app->queue->push(new SendEmailJob([
+                'paymentLineId' => $paymentLine->id,
+            ]));
+        }
+
+        Yii::$app->session->setFlash('success', 'The tenants of this property have begun receiving their rentail bills.');
+
+        return $this->redirect(['view', 'id' => $id]);
+    }
+
+    public function actionCommit()
+    {
+        try {
+            $endpoint = Yii::$app->request->post('service');
+            $field = Yii::$app->request->post('name');
+            $value = Yii::$app->request->post('value');
+
+            $payload = [
+                $field => $value
+            ];
+            $client = new Client([
+                'transport' => CurlTransport::class,
+            ]);
+
+            $request = $client->createRequest()
+                ->setMethod('PUT')
+                ->setUrl($endpoint)
+                ->addHeaders(['Content-Type' => 'application/json'])
+                ->setFormat(Client::FORMAT_JSON)  // Ensures JSON encoding
+                ->setData($payload)
+                ->setOptions([
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false
+                ]);
+
+            $response = $request->send();
+
+            if ($response->isOk) { // Check if the response status is 200-299
+                return $response->data; // Return the relevant response data
+            } else {
+                // Log error details if needed and return a clear message
+                return [
+                    'status' => $response->statusCode,
+                    'error' => $response->data ?? 'Unexpected error occurred'
+                ];
+            }
+        } catch (\Exception $e) {
+            return "HTTP request failed with error: " . $e->getMessage();
+        }
+
+    }
+
 }

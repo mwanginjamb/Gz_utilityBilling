@@ -1,0 +1,65 @@
+{
+    "short_name": "Gumzo Billing",
+    "name": "Gumzo Estate Billing Solution",
+    "id": "/?source=pwa",
+    "orientation": "portrait",
+    "start_url": "/site",
+    "background_color": "#2890D6",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#134474",
+    "icons": [
+        {
+            "src": "/images/icons/android-chrome-512x512.webp",
+            "type": "image/svg+xml",
+            "sizes": "512x512"
+        },
+        {
+            "src": "/images/icons/android-chrome-192x192.webp",
+            "type": "image/webp",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/images/icons/favicon-32x32.webp",
+            "type": "image/webp",
+            "sizes": "32x32"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Gumzo Estate Biller - Properties",
+            "short_name": "Properties View",
+            "description": "A list of your property portfolio",
+            "url": "/leave?source=pwa",
+            "icons": [
+                {
+                    "src": "/images/icons/android-chrome-192x192.webp",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/images/screenshot1.webp",
+            "type": "image/webp",
+            "sizes": "540x720",
+            "form_factor": "wide",
+            "label": "Login"
+        },
+        {
+            "src": "/images/screenshot2.webp",
+            "type": "image/jpg",
+            "sizes": "720x540",
+            "form_factor": "wide",
+            "label": "Password Reset"
+        },
+        {
+            "src": "/images/screenshot3.webp",
+            "type": "image/jpg",
+            "sizes": "720x540",
+            "form_factor": "wide",
+            "label": "Vendor Signup"
+        }
+    ]
+}

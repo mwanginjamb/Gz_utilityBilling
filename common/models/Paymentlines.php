@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\VarDumper;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "paymentlines".
@@ -19,11 +22,18 @@ use Yii;
  * @property int|null $deleted
  * @property int|null $deleted_at
  * @property int|null $deleted_by
+ * @property int|null $tenant_id
+ * @property int|null $tenant_name
+ * @property int|null $agreed_rent_payable
+ * @property int|null $agreed_water_rate
+ * @property int|null $service_charge
  *
  * @property Paymentheader $paymentheader
  */
 class Paymentlines extends \yii\db\ActiveRecord
 {
+
+
     /**
      * {@inheritdoc}
      */
@@ -32,12 +42,24 @@ class Paymentlines extends \yii\db\ActiveRecord
         return 'paymentlines';
     }
 
+    public function behaviors()
+    {
+        return [
+            BlameableBehavior::class,
+            [
+                'class' => TimestampBehavior::class,
+                'updatedAtAttribute' => 'update_at',
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
+            [['tenant_id', 'tenant_name', 'agreed_rent_payable', 'agreed_water_rate', 'water_bill', 'units_used', 'service_charge', 'invoiced'], 'safe'],
             [['paymentheader_id', 'opening_water_readings', 'closing_water_readings', 'settled', 'created_at', 'update_at', 'created_by', 'updated_by', 'deleted', 'deleted_at', 'deleted_by'], 'integer'],
             [['paymentheader_id'], 'exist', 'skipOnError' => true, 'targetClass' => Paymentheader::class, 'targetAttribute' => ['paymentheader_id' => 'id']],
         ];
@@ -74,6 +96,11 @@ class Paymentlines extends \yii\db\ActiveRecord
         return $this->hasOne(Paymentheader::class, ['id' => 'paymentheader_id']);
     }
 
+    public function getTenant()
+    {
+        return $this->hasOne(Tenant::class, ['id' => 'tenant_id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return PaymentlinesQuery the active query used by this AR class.
@@ -82,4 +109,41 @@ class Paymentlines extends \yii\db\ActiveRecord
     {
         return new PaymentlinesQuery(get_called_class());
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if ($insert) {
+            $currentHeader = $this->paymentheader;
+
+            $previousPaymentline = self::find()
+                ->joinWith('paymentheader')
+                ->where(['paymentline.tenant_id' => $this->tenant_id])
+                ->andWhere(['paymentheader.property_id' => $currentHeader->property_id])
+                ->andWhere(['<', 'paymentheader.payperiod_id', $currentHeader->payperiod_id])
+                ->orderBy(['paymentheader.id' => SORT_DESC])
+                ->one();
+
+            Yii::info('Previous Line for header:  ' . $currentHeader->id ?? ' [None prev header]' . VarDumper::dumpAsString($previousPaymentline), 'dbinfo');
+
+            if ($previousPaymentline) {
+                $this->updateAttributes(['opening_water_readings' => $previousPaymentline->closing_water_readings]);
+            }
+        }
+
+        /* calculate water bill
+        consider opening reading and closing reading, agreed water rate and units used
+        upon update of closing reading
+        calculate units used = (closing reading - opening reading)
+        calculate water bill = (closing reading - opening reading) * agreed water rate
+        */
+        if (!$insert) {
+            if ($this->closing_water_readings != $this->opening_water_readings) {
+                $this->updateAttributes(['units_used' => $this->closing_water_readings - $this->opening_water_readings]);
+                $this->updateAttributes(['water_bill' => ($this->closing_water_readings - $this->opening_water_readings) * $this->agreed_water_rate]);
+            }
+        }
+    }
+
+
 }

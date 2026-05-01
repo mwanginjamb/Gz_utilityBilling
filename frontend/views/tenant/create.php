@@ -9,12 +9,18 @@ $this->title = Yii::t('app', 'Create Tenant');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tenants'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="tenant-create">
+<div class="tenant-create card">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <div class="card-header">
+        <div class="card-title">
+            <h3><?= Html::encode($this->title) ?></h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <?= $this->render('_form', [
+            'model' => $model,
+            'units' => $units
+        ]) ?>
+    </div>
 
 </div>

@@ -1,5 +1,8 @@
 <?php
 
+use common\models\Property;
+use common\models\Tenant;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -14,23 +17,23 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'unit_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tenant_id')->textInput() ?>
+    <?php //$form->field($model, 'tenant_id')->dropDownList(ArrayHelper::map(Tenant::find()->all(), 'id', 'principle_tenant_name'), ['prompt' => 'Select ...']) ?>
 
-    <?= $form->field($model, 'property_id')->textInput() ?>
+    <?= $form->field($model, 'property_id')->dropDownList(ArrayHelper::map(Property::find()->all(), 'id', 'name'), ['prompt' => 'Select ...']) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+    <?php $form->field($model, 'created_at')->textInput() ?>
 
-    <?= $form->field($model, 'update_at')->textInput() ?>
+    <?php $form->field($model, 'update_at')->textInput() ?>
 
-    <?= $form->field($model, 'created_by')->textInput() ?>
+    <?php $form->field($model, 'created_by')->textInput() ?>
 
-    <?= $form->field($model, 'updated_by')->textInput() ?>
+    <?php $form->field($model, 'updated_by')->textInput() ?>
 
-    <?= $form->field($model, 'deleted')->textInput() ?>
+    <?php $form->field($model, 'deleted')->textInput() ?>
 
-    <?= $form->field($model, 'deleted_at')->textInput() ?>
+    <?php $form->field($model, 'deleted_at')->textInput() ?>
 
-    <?= $form->field($model, 'deleted_by')->textInput() ?>
+    <?php $form->field($model, 'deleted_by')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

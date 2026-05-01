@@ -22,6 +22,7 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property string $usertype
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -56,6 +57,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['usertype', 'in', 'range' => ['admin', 'tenant']]
         ];
     }
 
@@ -110,7 +112,8 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $token verify email token
      * @return static|null
      */
-    public static function findByVerificationToken($token) {
+    public static function findByVerificationToken($token)
+    {
         return static::findOne([
             'verification_token' => $token,
             'status' => self::STATUS_INACTIVE
@@ -209,5 +212,16 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * Summary of getTenant
+     * @return Yii\db\ActiveQuery
+     * Since we do not have a related user ID at import of data,
+     * then relationship is made via tenant.billing_email_address
+     */
+    public function getTenant()
+    {
+        return $this->hasOne(Tenant::class, ['billing_email_address' => 'email']);
     }
 }

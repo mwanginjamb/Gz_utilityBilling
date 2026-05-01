@@ -2,11 +2,13 @@
 
 namespace frontend\controllers;
 
-use common\models\Paymentlines;
-use common\models\PaymentlinesSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\helpers\VarDumper;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use common\models\Paymentlines;
+use yii\web\NotFoundHttpException;
+use common\models\PaymentlinesSearch;
 
 /**
  * PaymentlinesController implements the CRUD actions for Paymentlines model.
@@ -21,6 +23,17 @@ class PaymentlinesController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'index', 'update', 'view', 'create'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -92,6 +105,8 @@ class PaymentlinesController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $tenant = \Yii::$app->request->get('tenant');
+
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -99,6 +114,7 @@ class PaymentlinesController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'tenant' => $tenant
         ]);
     }
 

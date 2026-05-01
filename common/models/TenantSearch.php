@@ -17,7 +17,7 @@ class TenantSearch extends Tenant
     public function rules()
     {
         return [
-            [['id', 'user_id', 'agreed_rent_payable', 'agreed_water_rate', 'has_signed_tenancy_agreement', 'created_at', 'update_at'], 'integer'],
+            [['id', 'user_id', 'agreed_rent_payable', 'agreed_water_rate', 'has_signed_tenancy_agreement', 'created_at', 'updated_at'], 'integer'],
             [['principle_tenant_name', 'house_number', 'cell_number', 'billing_email_address', 'id_number'], 'safe'],
         ];
     }
@@ -56,6 +56,9 @@ class TenantSearch extends Tenant
             return $dataProvider;
         }
 
+
+
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -64,7 +67,7 @@ class TenantSearch extends Tenant
             'agreed_water_rate' => $this->agreed_water_rate,
             'has_signed_tenancy_agreement' => $this->has_signed_tenancy_agreement,
             'created_at' => $this->created_at,
-            'update_at' => $this->update_at,
+            'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'principle_tenant_name', $this->principle_tenant_name])
@@ -72,6 +75,9 @@ class TenantSearch extends Tenant
             ->andFilterWhere(['like', 'cell_number', $this->cell_number])
             ->andFilterWhere(['like', 'billing_email_address', $this->billing_email_address])
             ->andFilterWhere(['like', 'id_number', $this->id_number]);
+
+
+
 
         return $dataProvider;
     }

@@ -17,7 +17,7 @@ class PropertySearch extends Property
     public function rules()
     {
         return [
-            [['id', 'created_at', 'update_at', 'created_by', 'updated_by'], 'integer'],
+            [['id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name', 'build_date'], 'safe'],
         ];
     }
@@ -61,7 +61,7 @@ class PropertySearch extends Property
             'id' => $this->id,
             'build_date' => $this->build_date,
             'created_at' => $this->created_at,
-            'update_at' => $this->update_at,
+            'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);

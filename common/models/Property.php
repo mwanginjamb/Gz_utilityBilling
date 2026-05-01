@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "property".
@@ -11,12 +13,14 @@ use Yii;
  * @property string|null $name
  * @property string|null $build_date
  * @property int|null $created_at
- * @property int|null $update_at
+ * @property int|null $updated_at
  * @property int|null $created_by
  * @property int|null $updated_by
+ * @property string|null $billing_type
  *
  * @property Paymentheader[] $paymentheaders
  * @property Payperiod[] $payperiods
+ * @property Unit[] $units
  */
 class Property extends \yii\db\ActiveRecord
 {
@@ -28,14 +32,23 @@ class Property extends \yii\db\ActiveRecord
         return 'property';
     }
 
+    public function behaviors()
+    {
+        return [
+            BlameableBehavior::class,
+            TimestampBehavior::class,
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
+            ['billing_type', 'required'],
             [['build_date'], 'safe'],
-            [['created_at', 'update_at', 'created_by', 'updated_by'], 'integer'],
+            [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['name'], 'string', 'max' => 100],
         ];
     }
@@ -50,7 +63,7 @@ class Property extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Name'),
             'build_date' => Yii::t('app', 'Build Date'),
             'created_at' => Yii::t('app', 'Created At'),
-            'update_at' => Yii::t('app', 'Update At'),
+            'updated_at' => Yii::t('app', 'Updated At'),
             'created_by' => Yii::t('app', 'Created By'),
             'updated_by' => Yii::t('app', 'Updated By'),
         ];
@@ -74,6 +87,16 @@ class Property extends \yii\db\ActiveRecord
     public function getPayperiods()
     {
         return $this->hasMany(Payperiod::class, ['property_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Units]].
+     *
+     * @return \yii\db\ActiveQuery|UnitQuery
+     */
+    public function getUnits()
+    {
+        return $this->hasMany(Unit::class, ['property_id' => 'id']);
     }
 
     /**

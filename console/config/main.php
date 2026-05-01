@@ -1,4 +1,5 @@
 <?php
+use yii\faker\FixtureController;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -14,13 +15,22 @@ return [
     'controllerNamespace' => 'console\controllers',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'controllerMap' => [
         'fixture' => [
-            'class' => \yii\console\controllers\FixtureController::class,
+            'class' => FixtureController::class,
             'namespace' => 'common\fixtures',
-          ],
+            'templatePath' => '@common/fixtures/templates',
+            'fixtureDataPath' => '@common/fixtures/data',
+        ],
+        /* 'migrate' => [
+             'class' => 'yii\console\controllers\MigrateController',
+             'migrationPath' => null,
+             'migrationNamespaces' => [
+                 'yii\queue\db\migrations',
+             ],
+         ]*/
     ],
     'components' => [
         'log' => [
@@ -29,7 +39,23 @@ return [
                     'class' => \yii\log\FileTarget::class,
                     'levels' => ['error', 'warning'],
                 ],
+                [
+                    'class' => \yii\log\FileTarget::class,
+                    'levels' => ['error', 'warning', 'info'],
+                    'categories' => ['jobErrors', 'jobInfo'], // Custom category for job errors
+                    'logFile' => '@runtime/logs/terminal.log', // Path to the log file
+                    'logVars' => [], // Exclude variables like $_SERVER, $_POST, etc., if unnecessary
+                    'maxFileSize' => 10240, // Maximum log file size in KB
+                    'maxLogFiles' => 10, // Number of log files to keep
+                ],
             ],
+        ],
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            'baseUrl' => env('APP_BASE_URL'),  // Replace with your actual domain
+            'hostInfo' => env('APP_BASE_URL'),  // Full host URL
+            'enablePrettyUrl' => true,               // Set to true if you are using pretty URLs
+            'showScriptName' => false,               // Hide index.php if not using it in URL paths
         ],
     ],
     'params' => $params,

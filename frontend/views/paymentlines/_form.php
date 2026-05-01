@@ -8,31 +8,31 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="paymentlines-form">
+<div class=" paymentlines-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'paymentheader_id')->textInput() ?>
+    <?= $form->field($model, 'paymentheader_id')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'opening_water_readings')->textInput() ?>
+    <?= $form->field($model, 'opening_water_readings')->textInput(['type' => 'number']) ?>
 
-    <?= $form->field($model, 'closing_water_readings')->textInput() ?>
+    <?= $form->field($model, 'closing_water_readings')->textInput(['type' => 'number']) ?>
 
-    <?= $form->field($model, 'settled')->textInput() ?>
+    <?php $form->field($model, 'settled')->textInput() ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+    <?php $form->field($model, 'created_at')->textInput() ?>
 
-    <?= $form->field($model, 'update_at')->textInput() ?>
+    <?php $form->field($model, 'update_at')->textInput() ?>
 
-    <?= $form->field($model, 'created_by')->textInput() ?>
+    <?php $form->field($model, 'created_by')->textInput() ?>
 
-    <?= $form->field($model, 'updated_by')->textInput() ?>
+    <?php $form->field($model, 'updated_by')->textInput() ?>
 
-    <?= $form->field($model, 'deleted')->textInput() ?>
+    <?php $form->field($model, 'deleted')->textInput() ?>
 
-    <?= $form->field($model, 'deleted_at')->textInput() ?>
+    <?php $form->field($model, 'deleted_at')->textInput() ?>
 
-    <?= $form->field($model, 'deleted_by')->textInput() ?>
+    <?php $form->field($model, 'deleted_by')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

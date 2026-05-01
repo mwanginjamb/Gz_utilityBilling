@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "payperiodstatus".
@@ -26,6 +28,17 @@ class Payperiodstatus extends \yii\db\ActiveRecord
         return 'payperiodstatus';
     }
 
+    public function behaviors()
+    {
+        return [
+            BlameableBehavior::class,
+            [
+                'class' => TimestampBehavior::class,
+                'updatedAtAttribute' => 'update_at',
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -44,7 +57,7 @@ class Payperiodstatus extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
+            'name' => Yii::t('app', 'Status Name'),
             'created_at' => Yii::t('app', 'Created At'),
             'update_at' => Yii::t('app', 'Update At'),
             'created_by' => Yii::t('app', 'Created By'),

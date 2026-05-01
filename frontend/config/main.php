@@ -1,4 +1,7 @@
 <?php
+
+use frontend\modules\apiv1\controllers\PaymentlinesController;
+use yii\rest\UrlRule;
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -8,12 +11,16 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
+    'name' => env('APP_NAME'),
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -36,14 +43,32 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'apiv1/schedule',
+                        'apiv1/invoicelines',
+                        'apiv1/tenant',
+                        'apiv1/asset',
+                        'apiv1/visitor',
+                        'apiv1/associatedpayments',
+
+                    ],
+                    'except' => ['delete'],
+
+                ]
             ],
         ],
 
+    ],
+    'modules' => [
+        'apiv1' => [
+            'class' => 'frontend\modules\apiv1\Module',
+        ]
     ],
     'params' => $params,
 ];

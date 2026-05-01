@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use common\models\Property;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "tenant".
@@ -19,15 +21,26 @@ use Yii;
  * @property int|null $has_signed_tenancy_agreement
  * @property int|null $created_at
  * @property int|null $update_at
+ * @property double|null $service_charge
  */
 class Tenant extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
+
+    public $property;
+
     public static function tableName()
     {
         return 'tenant';
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+        ];
     }
 
     /**
@@ -36,10 +49,20 @@ class Tenant extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'agreed_rent_payable', 'agreed_water_rate', 'has_signed_tenancy_agreement', 'created_at', 'update_at'], 'integer'],
-            [['principle_tenant_name', 'house_number'], 'string', 'max' => 255],
-            [['cell_number'], 'string', 'max' => 15],
+            [['principle_tenant_name', 'billing_email_address', 'house_number', 'cell_number', 'agreed_rent_payable', 'agreed_water_rate'], 'required'],
+            [['user_id', 'agreed_rent_payable', 'agreed_water_rate', 'has_signed_tenancy_agreement', 'created_at', 'updated_at'], 'integer'],
+            [['principle_tenant_name'], 'string', 'max' => 255],
+            [['cell_number'], 'string', 'max' => 25],
             [['billing_email_address', 'id_number'], 'string', 'max' => 50],
+            ['billing_email_address', 'email'],
+            ['property', 'string'],
+            ['service_charge', 'double'],
+            [
+                ['principle_tenant_name', 'billing_email_address', 'house_number'],
+                'unique',
+                'targetAttribute' => ['principle_tenant_name', 'billing_email_address', 'house_number'],
+                'message' => 'The tenant details are already onboarded for that property.'
+            ],
         ];
     }
 
@@ -67,8 +90,14 @@ class Tenant extends \yii\db\ActiveRecord
 
     public function getUnit()
     {
-        return $this->hasOne(Unit::class, ['unit_name' => 'house_number']);
+        return $this->hasOne(Unit::class, ['id' => 'house_number']);
     }
+
+    public function getPayments()
+    {
+        return $this->hasMany(Paymentlines::class, ['tenant_id' => 'id']);
+    }
+
 
     /**
      * {@inheritdoc}

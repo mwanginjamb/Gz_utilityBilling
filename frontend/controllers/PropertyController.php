@@ -2,11 +2,19 @@
 
 namespace frontend\controllers;
 
-use common\models\Property;
-use common\models\PropertySearch;
+use Yii;
+use common\models\Unit;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use yii\httpclient\Client;
+use common\models\Property;
+use common\models\Schedule;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
+use common\models\PropertySearch;
+use yii\httpclient\CurlTransport;
+use yii\filters\ContentNegotiator;
+use yii\web\NotFoundHttpException;
 
 /**
  * PropertyController implements the CRUD actions for Property model.
@@ -21,14 +29,48 @@ class PropertyController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'only' => ['logout', 'index', 'update', 'view', 'create'],
+                    'rules' => [
+                        [
+                            'actions' => ['logout', 'index', 'update', 'view', 'delete', 'create'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
                     ],
                 ],
+                'contentNegotiator' => [
+                    'class' => ContentNegotiator::class,
+                    'only' => ['commit'],
+                    'formatParam' => '_format',
+                    'formats' => [
+                        'application/json' => \yii\web\Response::FORMAT_JSON,
+                    ]
+                ],
             ]
         );
+    }
+
+
+    public function beforeAction($action)
+    {
+
+        $ExceptedActions = [
+            'commit',
+        ];
+
+        if (in_array($action->id, $ExceptedActions)) {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     /**
@@ -40,10 +82,13 @@ class PropertyController extends Controller
     {
         $searchModel = new PropertySearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $user = Yii::$app->user->id;
+        $properties = Property::find()->where(['or', ['created_by' => $user], ['updated_by' => $user]])->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'dataProvider' => $properties,
+
         ]);
     }
 
@@ -55,8 +100,37 @@ class PropertyController extends Controller
      */
     public function actionView($id)
     {
+        $totalRevenue = 0;
+
+        $occupiedUnits = Unit::find()->joinWith('tenant')
+            ->andWhere(['property_id' => $id])
+            ->andWhere(['not', ['tenant.id' => NULL]])->asArray()->all();
+
+        $vacantUnits = Unit::find()->joinWith('tenant')
+            ->andWhere(['property_id' => $id])
+            ->andWhere(['tenant.id' => NULL])->asArray()->all();
+
+        //Yii::$app->utility->printrr($vacantUnits);
+
+        $totalTenants = count($occupiedUnits);
+        $totalVacant = count($vacantUnits);
+
+        if (is_array($occupiedUnits) && count($occupiedUnits)) {
+            $totalRevenue = array_reduce($occupiedUnits, function ($total, $unit) {
+                return $total + $unit['tenant']['agreed_rent_payable'];
+            }, 0);
+        }
+
+        $schedule = Schedule::find()->where(['estate_id' => $id])->one();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'occupiedUnits' => $occupiedUnits,
+            'totalTenants' => $totalTenants,
+            'totalVacant' => $totalVacant,
+            'totalRevenue' => $totalRevenue,
+            'vacantUnits' => $vacantUnits,
+            'schedule' => $schedule
         ]);
     }
 
@@ -79,6 +153,7 @@ class PropertyController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+
         ]);
     }
 
@@ -130,5 +205,62 @@ class PropertyController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionSchedule()
+    {
+        $property = Yii::$app->request->post('property');
+        $schedule = new Schedule();
+        $schedule->estate_id = $property;
+        if ($schedule->save()) {
+            Yii::$app->session->setFlash('success', 'A scheduling for billing has been created, please adjust the billing date from the scheduling table.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Could not create a scheduled billing schedule, contact the administrator.');
+        }
+
+        return $this->redirect(['view', 'id' => $property]);
+    }
+
+    public function actionCommit()
+    {
+        try {
+            $endpoint = Yii::$app->request->post('service');
+            $field = Yii::$app->request->post('name');
+            $value = Yii::$app->request->post('value');
+
+            $payload = [
+                $field => $value
+            ];
+
+            $client = new Client([
+                'transport' => CurlTransport::class,
+            ]);
+
+            $request = $client->createRequest()
+                ->setMethod('PUT')
+                ->setUrl($endpoint)
+                ->addHeaders(['Content-Type' => 'application/json'])
+                ->setFormat(Client::FORMAT_JSON)  // Ensures JSON encoding
+                ->setData($payload)
+                ->setOptions([
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false
+                ]);
+
+            $response = $request->send();
+
+            if ($response->isOk) { // Check if the response status is 200-299
+                return $response->data; // Return the relevant response data
+            } else {
+                // Log error details if needed and return a clear message
+                return [
+                    'status' => $response->statusCode,
+                    'error' => $response->data ?? 'Unexpected error occurred'
+                ];
+            }
+        } catch (\Exception $e) {
+            return "HTTP request failed with error: " . $e->getMessage();
+        }
+
     }
 }

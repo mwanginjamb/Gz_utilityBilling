@@ -14,6 +14,12 @@ class PaymentlinesQuery extends \yii\db\ActiveQuery
         return $this->andWhere('[[status]]=1');
     }*/
 
+    // list all items in descending order by id by default
+    public function init()
+    {
+        return $this->orderBy(['id' => SORT_DESC]);
+    }
+
     /**
      * {@inheritdoc}
      * @return Paymentlines[]|array

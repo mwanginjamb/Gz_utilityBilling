@@ -14,6 +14,11 @@ class PropertyQuery extends \yii\db\ActiveQuery
         return $this->andWhere('[[status]]=1');
     }*/
 
+    public function init()
+    {
+        return $this->orderBy(['id' => SORT_DESC]);
+    }
+
     /**
      * {@inheritdoc}
      * @return Property[]|array
