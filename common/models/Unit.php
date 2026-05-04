@@ -94,4 +94,33 @@ class Unit extends \yii\db\ActiveRecord
     {
         return new UnitQuery(get_called_class());
     }
+
+     /**
+     * Returns all vacant units (no active tenancy).
+     */
+    public static function findVacant(): \yii\db\ActiveQuery
+    {
+        return self::find()
+            ->leftJoin('unit_tenancy ut', 'ut.unit_id = unit.id AND ut.is_active = 1')
+            ->where(['ut.id' => null])
+            ->andWhere(['unit.deleted' => null]); // exclude soft-deleted units
+    }
+
+    /**
+     * Returns vacant units for a specific property.
+     */
+    public static function findVacantByProperty(int $propertyId): \yii\db\ActiveQuery
+    {
+        return self::findVacant()->andWhere(['unit.property_id' => $propertyId]);
+    }
+
+    /**
+     * Check if this specific unit is vacant
+     */
+    public function isVacant(): bool
+    {
+        return UnitTenancy::findActiveByUnit($this->id) === null;
+    }
+
+
 }

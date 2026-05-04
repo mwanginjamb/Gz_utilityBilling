@@ -107,4 +107,23 @@ class Property extends \yii\db\ActiveRecord
     {
         return new PropertyQuery(get_called_class());
     }
+
+    /**
+     * Get Vacancy Summary
+     */
+
+    public function getVacancySummary(): array
+    {
+        $total = Unit::find()->where(['property_id' => $this->id])->count();
+        $occupied = Unit::find()
+        ->innerJoin('unit_tenancy ut', 'ut.unit_id = unit.id AND ut.is_active = 1')
+        ->where(['unit.property_id' => $this->id])
+        ->count();
+        $vacant = $total - $occupied;
+        return [
+            'total' => $total,
+            'occupied' => $occupied,
+            'vacant' => $vacant,
+        ];
+    }
 }

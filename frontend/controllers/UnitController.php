@@ -249,6 +249,8 @@ class UnitController extends Controller
                                 Yii::error('Tenant saving error: ' . $v[0] . ' <b>Got value</b>: <i><u>' . $tenant->$k . '</u>', 'dbinfo');
                             }
                         } else {
+                            // Move in the tenant
+                            \common\models\UnitTenancy::moveIn($model->id, $tenant->id, date('Y-m-d'),'Moved in during import');
                             Yii::info('Imported tenant' . VarDumper::dumpAsString($tenant), 'dbinfo');
                         }
                         Yii::$app->session->setFlash('success', 'Congratulations, all valid records are completely imported into the system.');
@@ -281,4 +283,5 @@ class UnitController extends Controller
             Yii::$app->getResponse()->redirect(Yii::$app->request->referrer);
         }
     }
-}
+
+   }
